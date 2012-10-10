@@ -1,19 +1,41 @@
 package com.example.myfirstproject;
 
+import ru.gopnikgame.ai.SimpleLogicStringAi;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	public final static String EXTRA_MESSAGE = "com.example.myfirstproject.MESSAGE";
+
+	TextView.OnEditorActionListener exampleListener = new TextView.OnEditorActionListener() {
+		public boolean onEditorAction(TextView exampleView, int actionId,
+				KeyEvent event) {
+			if (actionId == EditorInfo.IME_NULL
+					&& event.getAction() == KeyEvent.ACTION_DOWN) {
+
+				EditText et = ((EditText) findViewById(R.id.input_text));
+				String reply = SimpleLogicStringAi.getReply(et.getText()
+						.toString());
+				et.setText("");
+
+				TextView tw = ((TextView) findViewById(R.id.output_text));
+				tw.setText(reply);
+			}
+			return true;
+		}
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		EditText e = ((EditText) findViewById(R.id.input_text));
+		e.setOnEditorActionListener(exampleListener);
 	}
 
 	@Override
@@ -22,11 +44,4 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	public void sendMessage(View view) {
-		Intent intent = new Intent(this, DisplayMessageActivity.class);
-		EditText editText = (EditText) findViewById(R.id.edit_message);
-		String message = editText.getText().toString();
-		intent.putExtra(EXTRA_MESSAGE, message);
-		startActivity(intent);
-	}
 }
