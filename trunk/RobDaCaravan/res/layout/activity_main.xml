@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+	<Button
+	    android:id="@+id/Play"
+	    android:layout_width="100dp"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_centerVertical="true"
+	    android:onClick="toWorldScreen"
+	    android:text="@string/button_play"
+	    android:textAlignment="center" />
+
+	<TextView
+	    android:id="@+id/title"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="51dp"
+	    android:text="@string/title"
+	    android:textAlignment="center"
+	    android:textSize="32sp" />
+
+	<Button
+	    android:id="@+id/Settings"
+	    android:layout_width="100dp"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/Play"
+	    android:layout_centerHorizontal="true"
+	    android:onClick="toSettingsScreen"
+	    android:text="@string/button_settings"
+	    android:textAlignment="center" />
+
+	<Button
+	    android:id="@+id/Exit"
+	    android:layout_width="100dp"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/Play"
+	    android:layout_alignParentBottom="true"
+	    android:layout_marginBottom="20dp"
+	    android:onClick="destroyApp"
+	    android:text="@string/button_exit"
+	    android:textAlignment="center" />
+	
+</RelativeLayout>
