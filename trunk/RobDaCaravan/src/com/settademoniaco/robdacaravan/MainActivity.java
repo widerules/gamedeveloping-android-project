@@ -29,17 +29,15 @@ public class MainActivity extends Activity {
 	}
 	
 	public void toWorldScreen(View view) {
-		// Exiting the application from main menu
+		// Moving on to the World View Scene
 		Intent intent = new Intent(this, WorldActivity.class);
-		
 		startActivity(intent);
-		
-		finish();
 		}
 	
 	public void toSettingsScreen(View view) {
-		// Exiting the application from main menu
-
+		// Moving on to the settings screen
+		Intent intent = new Intent(this, SettingsActivity.class);
+		startActivity(intent);
 		}
 		
 	public void destroyApp(View view) {
