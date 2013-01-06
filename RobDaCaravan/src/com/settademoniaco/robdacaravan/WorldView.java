@@ -9,16 +9,16 @@ import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class GameView extends SurfaceView {
+public class WorldView extends SurfaceView {
 	private Bitmap bmp;
 	private SurfaceHolder holder;
-	private GameLoopThread gameLoopThread;
+	protected static WorldLoopThread gameLoopThread;
 	private int x=0, y=0;
 	private int xSpeed=3, ySpeed=5;
 	
-	public GameView(Context context) {
+	public WorldView(Context context) {
 		super(context);
-		gameLoopThread = new GameLoopThread(this);
+		gameLoopThread = new WorldLoopThread(this);
 		holder = getHolder();
 		holder.addCallback(new Callback() {
 			
@@ -56,5 +56,6 @@ public class GameView extends SurfaceView {
 		
 		canvas.drawBitmap(bmp, x, y, null);
 	}
+	
 
 }

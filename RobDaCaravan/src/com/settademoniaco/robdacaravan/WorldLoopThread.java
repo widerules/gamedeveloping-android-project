@@ -2,12 +2,12 @@ package com.settademoniaco.robdacaravan;
 
 import android.graphics.Canvas;
 
-public class GameLoopThread extends Thread {
+public class WorldLoopThread extends Thread {
 	static final long FPS = 100;
-	private GameView view;
+	private WorldView view;
 	private boolean running = false;
 	
-	public GameLoopThread(GameView view) {
+	public WorldLoopThread(WorldView view) {
 		this.view = view;
 	}
 	

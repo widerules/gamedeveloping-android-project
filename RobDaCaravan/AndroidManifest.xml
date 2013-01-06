@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="8"
         android:targetSdkVersion="16" />
 
     <application
@@ -24,12 +24,33 @@
         </activity>
         <activity
             android:name="com.settademoniaco.robdacaravan.WorldActivity"
-            android:label="@string/world_name" >
+            android:label="@string/world_name" 
+            android:parentActivityName="com.settademoniaco.robdacaravan.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.settademoniaco.robdacaravan.MainActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.WORLD" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.settademoniaco.robdacaravan.FieldActivity"
+            android:label="@string/field_name"
+            android:parentActivityName="com.settademoniaco.robdacaravan.WorldActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.settademoniaco.robdacaravan.WorldActivity" />
+        </activity>
+        <activity
+            android:name="com.settademoniaco.robdacaravan.SettingsActivity"
+            android:label="@string/settings_name"
+            android:parentActivityName="com.settademoniaco.robdacaravan.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.settademoniaco.robdacaravan.MainActivity" />
         </activity>
     </application>
 

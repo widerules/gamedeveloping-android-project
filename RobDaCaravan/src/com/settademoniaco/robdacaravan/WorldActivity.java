@@ -1,7 +1,7 @@
 package com.settademoniaco.robdacaravan;
 
-import com.settademoniaco.robdacaravan.MainActivity;
-import com.settademoniaco.robdacaravan.GameView;
+import com.settademoniaco.robdacaravan.FieldActivity;
+import com.settademoniaco.robdacaravan.WorldView;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -15,15 +15,22 @@ public class WorldActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(new GameView(this));
+		setContentView(new WorldView(this));
 
 	}
 
-		
-	public void toMainScreen(View view) {
-		// Exiting the application from main menu
-		Intent intent = new Intent(this, MainActivity.class);
+	@Override
+	public void onBackPressed() {
+		WorldView.gameLoopThread.setRunning(false);
+		super.finish();
+	}
+	
+	
+	public void toFieldScreen(View view) {
+		// Moving into the fields
+		Intent intent = new Intent(this, FieldActivity.class);
 		startActivity(intent);
 		}
 
+	
 }
