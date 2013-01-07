@@ -1,4 +1,4 @@
 #summary Модель проекта
 
 =Первая версия модели классов=
-http://code.google.com/p/gamedeveloping-android-project/source/browse/wiki/uml_v0.1.png
+http://gamedeveloping-android-project.googlecode.com/svn/wiki/uml_v0.1.png
