@@ -1,14 +1,4 @@
-#summary Project description
+#summary Модель проекта
 
-= Introduction =
-
-Add your content here.
-
-wiki/uml_v0.1.png
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+=Первая версия модели классов=
+http://code.google.com/p/gamedeveloping-android-project/source/browse/wiki/uml_v0.1.png
