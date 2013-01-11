@@ -1,7 +1,7 @@
 <Project>
   <Name>android-caravan</Name>
   <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
-    <Name>class diagram</Name>
+    <Name>Cell</Name>
     <Language>CSharp</Language>
     <Entities>
       <Entity type="Interface">
@@ -101,6 +101,8 @@
         </BendPoint>
       </Relationship>
       <Relationship type="Association" first="7" second="5">
+        <Label>
+        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -118,6 +120,8 @@
         <EndMultiplicity>0..*</EndMultiplicity>
       </Relationship>
       <Relationship type="Association" first="7" second="4">
+        <Label>
+        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -135,6 +139,8 @@
         <EndMultiplicity>1..*</EndMultiplicity>
       </Relationship>
       <Relationship type="Association" first="4" second="5">
+        <Label>
+        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <Direction>Unidirectional</Direction>
@@ -144,6 +150,8 @@
         <EndMultiplicity>0..*</EndMultiplicity>
       </Relationship>
       <Relationship type="Association" first="5" second="0">
+        <Label>
+        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>
@@ -152,8 +160,6 @@
         <EndMultiplicity>0..*</EndMultiplicity>
       </Relationship>
       <Relationship type="Association" first="1" second="6">
-        <Label>
-        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -162,6 +168,269 @@
         </BendPoint>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>Activities</Name>
+    <Language>Java</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>MainMenu</Name>
+        <Access>Public</Access>
+        <Location left="508" top="282" />
+        <Size width="253" height="200" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public void toWorldScreen(View view)</Member>
+        <Member type="Method">public void toSettingsScreen(View view)</Member>
+        <Member type="Method">public void destroyApp(View view)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>World</Name>
+        <Access>Public</Access>
+        <Location left="508" top="569" />
+        <Size width="253" height="221" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public void toMainScreen(View view)</Member>
+        <Member type="Method">public void toGameCellScreen(View view)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Cell</Name>
+        <Access>Public</Access>
+        <Location left="508" top="874" />
+        <Size width="253" height="196" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public void toWorldScreen(View view)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Settings</Name>
+        <Access>Public</Access>
+        <Location left="950" top="282" />
+        <Size width="238" height="200" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public void toMainScreen(View view)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>Android</Name>
+        <Access>Public</Access>
+        <Location left="508" top="27" />
+        <Size width="253" height="176" />
+        <Collapsed>False</Collapsed>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Association" first="1" second="2">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onCellPicked</StartRole>
+      </Relationship>
+      <Relationship type="Association" first="3" second="0">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>925</X>
+          <Y>358</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>786</X>
+          <Y>358</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onExitPressed</StartRole>
+        <EndRole>onExitReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="1" second="4">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>246</X>
+          <Y>697</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>483</X>
+          <Y>117</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onBackLongPressed</StartRole>
+      </Relationship>
+      <Relationship type="Association" first="2" second="4">
+        <Label>destroyApp</Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>246</X>
+          <Y>979</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>482</X>
+          <Y>117</Y>
+        </BendPoint>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onBackLongPressed</StartRole>
+        <EndRole>onBackReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="3" second="4">
+        <Label>destroyApp</Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>975</X>
+          <Y>257</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>795</X>
+          <Y>119</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onBackLongPressed</StartRole>
+        <EndRole>onBackReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="4" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onIconPressed</StartRole>
+        <EndRole>onIconReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="0" second="1">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>616</X>
+          <Y>507</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>616</X>
+          <Y>544</Y>
+        </BendPoint>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onPlayPressed</StartRole>
+        <EndRole>onPlayReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="1" second="0">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>850</X>
+          <Y>622</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>798</X>
+          <Y>425</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onBackPressed</StartRole>
+        <EndRole>onBackReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="2" second="1">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>861</X>
+          <Y>995</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>807</X>
+          <Y>722</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onBackPressed</StartRole>
+        <EndRole>onBackReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="2" second="1">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>417</X>
+          <Y>893</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>455</X>
+          <Y>750</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onExitPressed</StartRole>
+        <EndRole>onExitReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="1" second="0">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>419</X>
+          <Y>592</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>462</X>
+          <Y>382</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onExitPressed</StartRole>
+        <EndRole>onExitReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="3" second="4">
+        <Label>pauseApp</Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1171</X>
+          <Y>256</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>791</X>
+          <Y>53</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onHomePressed/onSwitchPressed</StartRole>
+        <EndRole>onHomeReleased/onSwitchReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="2" second="4">
+        <Label>pauseApp</Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>453</X>
+          <Y>1027</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>147</X>
+          <Y>51</Y>
+        </BendPoint>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onHomePressed/onSwitchPressed</StartRole>
+        <EndRole>onHomeReleased/onSwitchReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="1" second="4">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>468</X>
+          <Y>640</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>147</X>
+          <Y>51</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onHomePressed/onSwitchPressed</StartRole>
       </Relationship>
     </Relationships>
   </ProjectItem>
