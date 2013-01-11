@@ -1,0 +1,336 @@
+<Project>
+  <Name>android-caravan-worldmap</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>Worldmap</Name>
+    <Language>Java</Language>
+    <Entities>
+      <Entity type="Interface">
+        <Name>MainActivity</Name>
+        <Access>Public</Access>
+        <Location left="696" top="130" />
+        <Size width="162" height="126" />
+        <Collapsed>False</Collapsed>
+      </Entity>
+      <Entity type="Class">
+        <Name>WorldmapView</Name>
+        <Access>Public</Access>
+        <Location left="627" top="648" />
+        <Size width="301" height="303" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public WorldmapView(Context context)</Member>
+        <Member type="Method">public void onDraw(Canvas canvas)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>WorldmapLoopThread</Name>
+        <Access>Public</Access>
+        <Location left="1030" top="1031" />
+        <Size width="313" height="328" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private static final int FPS</Member>
+        <Member type="Field">private boolean Running</Member>
+        <Member type="Field">private view WorldmapView</Member>
+        <Member type="Constructor">public WorldmapLoopThread(WorldmapView view)</Member>
+        <Member type="Method">public void setRunning(boolean Run)</Member>
+        <Member type="Method">public void run()</Member>
+        <Member type="Method">public void eventGenerator()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>WorldmapSprite</Name>
+        <Access>Public</Access>
+        <Location left="627" top="1031" />
+        <Size width="301" height="328" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private worldView WorldmapView</Member>
+        <Member type="Constructor">public WorldmapSprite(worldView WorldmapView)</Member>
+        <Member type="Method">private void update()</Member>
+        <Member type="Method">public void onDraw()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Interface">
+        <Name>WorldmapActivity</Name>
+        <Access>Public</Access>
+        <Location left="627" top="315" />
+        <Size width="301" height="250" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public void onCreate(Bundle savedInstanceState)</Member>
+        <Member type="Method">public void onBackPressed()</Member>
+        <Member type="Method">public void toMainScreen()</Member>
+        <Member type="Method">public void toBattlefieldScreen()</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>Event</Name>
+        <Access>Public</Access>
+        <Location left="1030" top="1428" />
+        <Size width="313" height="303" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private Type objectID</Member>
+        <Member type="Constructor">public Event(int xPos, int yPos)</Member>
+        <Member type="Method">public void changeWorldmapCell(int xPos, int yPos)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Enum">
+        <Name>EventCodes</Name>
+        <Access>Public</Access>
+        <Location left="590" top="1692" />
+        <Size width="306" height="303" />
+        <Collapsed>False</Collapsed>
+        <Value>AmbushPlaced</Value>
+        <Value>BlockpostAttack</Value>
+        <Value>MilitaryCamp</Value>
+        <Value>TownAttack</Value>
+      </Entity>
+      <Entity type="Class">
+        <Name>WorldmapCell</Name>
+        <Access>Public</Access>
+        <Location left="210" top="1031" />
+        <Size width="286" height="328" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public WorldmapCell(int xPos, int yPos, Type objectID)</Member>
+        <Member type="Method">public void newMethod()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Comment">
+        <Text>в конструкторе 
+@Override
+по методам
+onSurfaceCreated - запуск WorldmapLoopThread
+onSurfaceChanged - ?
+onSurfaceDestroyed - остановка WorldmapLoopThread, иначе вылетит exception</Text>
+        <Location left="1030" top="739" />
+        <Size width="444" height="109" />
+      </Entity>
+      <Entity type="Enum">
+        <Name>BasicCells</Name>
+        <Access>Public</Access>
+        <Location left="210" top="1692" />
+        <Size width="274" height="303" />
+        <Collapsed>False</Collapsed>
+        <Value>Blockpost</Value>
+        <Value>Desert</Value>
+        <Value>Forest</Value>
+        <Value>Grass</Value>
+        <Value>HeadQuarters</Value>
+        <Value>River</Value>
+        <Value>Road</Value>
+        <Value>Rock</Value>
+      </Entity>
+      <Entity type="Enum">
+        <Name>BasicCellsAnimation</Name>
+        <Access>Public</Access>
+        <Location left="214" top="2081" />
+        <Size width="270" height="302" />
+        <Collapsed>False</Collapsed>
+        <Value>BlockpostAnimation</Value>
+        <Value>DesertAnimation</Value>
+        <Value>ForestAnimation</Value>
+        <Value>GrassAnimation</Value>
+        <Value>HeadQuartersAnimation</Value>
+        <Value>RiverAnimation</Value>
+        <Value>RoadAnimation</Value>
+        <Value>RockAnimation</Value>
+      </Entity>
+      <Entity type="Enum">
+        <Name>EventAnimation</Name>
+        <Access>Public</Access>
+        <Location left="590" top="2081" />
+        <Size width="306" height="302" />
+        <Collapsed>False</Collapsed>
+        <Value>AmbushPlacedAnimation</Value>
+        <Value>BlockpostAttackAnimation</Value>
+        <Value>MilitaryCampAnimation</Value>
+        <Value>TownAttackAnimation</Value>
+      </Entity>
+      <Entity type="Comment">
+        <Text>А вот тут пригодился бы hash в виде AmbushPlaced:AmbushPlacedAnimation</Text>
+        <Location left="429" top="2013" />
+        <Size width="215" height="50" />
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Association" first="5" second="6">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1111</X>
+          <Y>1811</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="1" second="7">
+        <Label>new WorldmapCell</Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>656</X>
+          <Y>990</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>430</X>
+          <Y>990</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>N x M</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="1" second="3">
+        <Label>new WorldmapSprite</Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+        <StartRole>onDraw(texture)</StartRole>
+        <EndRole>onDraw(cells)</EndRole>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>1..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="1" second="2">
+        <Label>new WorldmapLoopThread</Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>903</X>
+          <Y>976</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Dependency" first="0" second="4">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Association" first="4" second="1">
+        <Label>new WorldmapView</Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="2" second="5">
+        <Label>new Event</Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1246</X>
+          <Y>1393</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1246</X>
+          <Y>1403</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Composition</AssociationType>
+        <StartRole>eventGenerator</StartRole>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>1..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="5" second="7">
+        <Label>changeWorldmapCell</Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>988</X>
+          <Y>1492</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>426</X>
+          <Y>1387</Y>
+        </BendPoint>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="7" second="3">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Comment" first="8" second="1">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Association" first="2" second="7">
+        <Label>worldmapCellCheck</Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1077</X>
+          <Y>1399</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>458</X>
+          <Y>1406</Y>
+        </BendPoint>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="7" second="9">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>249</X>
+          <Y>1384</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>249</X>
+          <Y>1667</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="7" second="6">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>328</X>
+          <Y>1468</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>751</X>
+          <Y>1666</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="6" second="11">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="9" second="10">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Bidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Comment" first="12" second="9">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Comment" first="12" second="6">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Comment" first="12" second="10">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Comment" first="12" second="11">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>
