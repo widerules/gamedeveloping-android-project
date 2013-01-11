@@ -21,7 +21,7 @@ public class WorldActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		WorldView.gameLoopThread.setRunning(false);
+		WorldView.worldLoopThread.setRunning(false);
 		super.finish();
 	}
 	

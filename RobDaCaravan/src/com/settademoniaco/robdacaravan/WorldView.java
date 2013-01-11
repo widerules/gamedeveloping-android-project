@@ -10,27 +10,37 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class WorldView extends SurfaceView {
+	private Bitmap texture;
 	private Bitmap bmp;
 	private SurfaceHolder holder;
-	protected static WorldLoopThread gameLoopThread;
-	private int x=0, y=0;
-	private int xSpeed=3, ySpeed=5;
-	
+	private WorldSprite worldSprite;
+	protected static WorldLoopThread worldLoopThread;
+
 	public WorldView(Context context) {
 		super(context);
-		gameLoopThread = new WorldLoopThread(this);
+		worldLoopThread = new WorldLoopThread(this);
 		holder = getHolder();
 		holder.addCallback(new Callback() {
 			
 			@Override
 			public void surfaceDestroyed(SurfaceHolder holder) {
-				
+				boolean retry = true;
+				worldLoopThread.setRunning(false);
+				while(retry) {
+					try {
+						worldLoopThread.join();
+						retry = false;
+					}
+					catch (InterruptedException e) {
+					
+					}
+				}
 			}
 			
 			@Override
 			public void surfaceCreated(SurfaceHolder holder) {
-				gameLoopThread.setRunning(true);
-				gameLoopThread.start();
+				worldLoopThread.setRunning(true);
+				worldLoopThread.start();
 			}
 			
 			@Override
@@ -39,22 +49,16 @@ public class WorldView extends SurfaceView {
 				
 			}
 		});
-		
-		bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+		texture = BitmapFactory.decodeResource(getResources(), R.drawable.texture);
+		bmp = BitmapFactory.decodeResource(getResources(), R.drawable.hero);
+		worldSprite = new WorldSprite(this, bmp);
 	}
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
-		canvas.drawColor(Color.WHITE);
-		if (x >= getWidth() - bmp.getWidth()) {xSpeed = 0; ySpeed = 5;}
-		if (y >= getHeight() - bmp.getHeight()) {xSpeed = -3; ySpeed = 0;}
-		if (x <= 0 && y >= getHeight() - bmp.getHeight()) {xSpeed = 0; ySpeed = -5;}
-		if (x <= 0 && y <=0) {xSpeed = 3; ySpeed = 0;}
 		
-		x+=xSpeed;
-		y+=ySpeed;
-		
-		canvas.drawBitmap(bmp, x, y, null);
+		canvas.drawBitmap(texture, 0, 0, null);
+		worldSprite.onDraw(canvas);
 	}
 	
 
