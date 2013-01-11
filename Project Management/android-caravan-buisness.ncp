@@ -1,0 +1,196 @@
+<Project>
+  <Name>android-caravan-buisness</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>BusinessLogic</Name>
+    <Language>CSharp</Language>
+    <Entities>
+      <Entity type="Interface">
+        <Name>Action</Name>
+        <Access>Public</Access>
+        <Location left="382" top="386" />
+        <Size width="246" height="122" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void perform(Unit u, World w)</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>Move</Name>
+        <Access>Public</Access>
+        <Location left="219" top="571" />
+        <Size width="162" height="77" />
+        <Collapsed>False</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Attack</Name>
+        <Access>Public</Access>
+        <Location left="411" top="571" />
+        <Size width="162" height="77" />
+        <Collapsed>False</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>BlockCell</Name>
+        <Access>Public</Access>
+        <Location left="600" top="571" />
+        <Size width="162" height="77" />
+        <Collapsed>False</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>GameCell</Name>
+        <Access>Public</Access>
+        <Location left="134" top="227" />
+        <Size width="162" height="127" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">private int x { get; set; }</Member>
+        <Member type="Property">private int y { get; set; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Unit</Name>
+        <Access>Public</Access>
+        <Location left="424" top="227" />
+        <Size width="162" height="94" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">private int hp { get; set; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Enum">
+        <Name>Direction</Name>
+        <Access>Public</Access>
+        <Location left="29" top="571" />
+        <Size width="162" height="129" />
+        <Collapsed>False</Collapsed>
+        <Value>UP</Value>
+        <Value>DOWN</Value>
+        <Value>LEFT</Value>
+        <Value>RIGHT</Value>
+      </Entity>
+      <Entity type="Class">
+        <Name>World</Name>
+        <Access>Public</Access>
+        <Location left="268" top="66" />
+        <Size width="162" height="77" />
+        <Collapsed>False</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Realization" first="1" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>433</X>
+          <Y>533</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Realization" first="2" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>492</X>
+          <Y>533</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Realization" first="3" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>555</X>
+          <Y>533</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="7" second="5">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>412</X>
+          <Y>168</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>479</X>
+          <Y>202</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+        <StartRole>units</StartRole>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>0..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="7" second="4">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>285</X>
+          <Y>168</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>210</X>
+          <Y>202</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+        <StartRole>gameCells</StartRole>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>1..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="4" second="5">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+        <StartRole>units</StartRole>
+        <StartMultiplicity>0..1</StartMultiplicity>
+        <EndMultiplicity>0..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="5" second="0">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>actions</StartRole>
+        <EndMultiplicity>0..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="1" second="6">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>261</X>
+          <Y>707</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="2" second="6">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>455</X>
+          <Y>746</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>83</X>
+          <Y>729</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="3" second="6">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>647</X>
+          <Y>770</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>59</X>
+          <Y>760</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>
