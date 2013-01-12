@@ -21,7 +21,7 @@
 ----
 = Краткое описание классов =
 WorldmapActivity.java - основа.<br>
-WorldmapView.java - отрисовка.<br>
+WorldmapView.java - поверхность, создание других объектов, отрисовка.<br>
 WorldmapLoopThread.java - поток времени.<br>
 WorldmapSprite.java - работа по отрисовке.<br>
 WorldmapCell.java - клетка территории.<br>
