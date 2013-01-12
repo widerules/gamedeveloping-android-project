@@ -19,11 +19,13 @@
 === Строка меню ===
 Содержит кнопку выхода, меню выбора скорости перемотки времени, информацию о текущем игровом времени.
 ----
-= Классы для работы =
-WorldmapActivity.java - основа.
-WorldmapView.java - отрисовка.
-WorldmapLoopThread.java - поток времени.
-WorldmapSprite.hava - работа со спрайтами.
+= Краткое описание классов =
+WorldmapActivity.java - основа.<br>
+WorldmapView.java - отрисовка.<br>
+WorldmapLoopThread.java - поток времени.<br>
+WorldmapSprite.java - работа по отрисовке.<br>
+WorldmapCell.java - клетка территории.<br>
+WorldmapEvent.java - событие.
 
 === Диаграмма классов ===
 http://gamedeveloping-android-project.googlecode.com/svn/wiki/WorldmapUML.png
