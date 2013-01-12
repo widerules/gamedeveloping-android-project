@@ -10,6 +10,7 @@
         <Location left="568" top="87" />
         <Size width="253" height="184" />
         <Collapsed>False</Collapsed>
+        <Member type="Method">void onIconPressed()</Member>
       </Entity>
       <Entity type="Class">
         <Name>SettingsActivity</Name>
@@ -48,6 +49,15 @@
         <Member type="Method">public void toWorldScreen(View view)</Member>
         <Member type="Method">public void toSettingsScreen(View view)</Member>
         <Member type="Method">public void destroyApp(View view)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>HeadQuartersActivity</Name>
+        <Access>Public</Access>
+        <Location left="1010" top="903" />
+        <Size width="238" height="196" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public void toWorldScreen(View view)</Member>
         <Modifier>None</Modifier>
       </Entity>
     </Entities>
@@ -91,12 +101,12 @@
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="True">
-          <X>1231</X>
-          <Y>316</Y>
+          <X>1232</X>
+          <Y>317</Y>
         </BendPoint>
         <BendPoint relativeToStartShape="False">
-          <X>851</X>
-          <Y>113</Y>
+          <X>853</X>
+          <Y>181</Y>
         </BendPoint>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
@@ -104,6 +114,8 @@
         <EndRole>onHomeReleased/onSwitchReleased</EndRole>
       </Relationship>
       <Relationship type="Association" first="3" second="4">
+        <Label>
+        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -120,6 +132,8 @@
         <EndRole>onExitReleased</EndRole>
       </Relationship>
       <Relationship type="Association" first="2" second="3">
+        <Label>
+        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -136,6 +150,8 @@
         <EndRole>onExitReleased</EndRole>
       </Relationship>
       <Relationship type="Association" first="2" second="3">
+        <Label>
+        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -143,8 +159,8 @@
           <Y>1024</Y>
         </BendPoint>
         <BendPoint relativeToStartShape="False">
-          <X>867</X>
-          <Y>782</Y>
+          <X>865</X>
+          <Y>802</Y>
         </BendPoint>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
@@ -168,6 +184,8 @@
         <EndRole>onBackReleased</EndRole>
       </Relationship>
       <Relationship type="Association" first="4" second="3">
+        <Label>
+        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -184,6 +202,8 @@
         <EndRole>onPlayReleased</EndRole>
       </Relationship>
       <Relationship type="Association" first="0" second="4">
+        <Label>
+        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Bidirectional</Direction>
@@ -200,8 +220,8 @@
           <Y>317</Y>
         </BendPoint>
         <BendPoint relativeToStartShape="False">
-          <X>855</X>
-          <Y>179</Y>
+          <X>860</X>
+          <Y>236</Y>
         </BendPoint>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
@@ -243,6 +263,8 @@
         <EndRole>onBackReleased</EndRole>
       </Relationship>
       <Relationship type="Association" first="1" second="4">
+        <Label>
+        </Label>
         <StartOrientation>Horizontal</StartOrientation>
         <EndOrientation>Horizontal</EndOrientation>
         <BendPoint relativeToStartShape="True">
@@ -259,11 +281,78 @@
         <EndRole>onExitReleased</EndRole>
       </Relationship>
       <Relationship type="Association" first="3" second="2">
+        <Label>
+        </Label>
         <StartOrientation>Vertical</StartOrientation>
         <EndOrientation>Vertical</EndOrientation>
         <Direction>Unidirectional</Direction>
         <AssociationType>Association</AssociationType>
         <StartRole>onCellPicked</StartRole>
+      </Relationship>
+      <Relationship type="Association" first="3" second="5">
+        <Label>onHQSelect</Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>875</X>
+          <Y>720</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1171</X>
+          <Y>871</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="5" second="0">
+        <Label>pauseApp</Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1459</X>
+          <Y>965</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>979</X>
+          <Y>97</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onHomePressed/onSwitchPressed</StartRole>
+        <EndRole>onHomeReleased/onSwitchReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="5" second="0">
+        <Label>destroyApp</Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1333</X>
+          <Y>937</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>872</X>
+          <Y>130</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onBackLongPressed</StartRole>
+        <EndRole>onBackReleased</EndRole>
+      </Relationship>
+      <Relationship type="Association" first="5" second="3">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1091</X>
+          <Y>878</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>868</X>
+          <Y>750</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>onBackPressed</StartRole>
+        <EndRole>onBackReleased</EndRole>
       </Relationship>
     </Relationships>
   </ProjectItem>
