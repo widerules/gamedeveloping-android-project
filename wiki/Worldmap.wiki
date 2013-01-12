@@ -26,4 +26,4 @@ WorldmapLoopThread.java - поток времени.
 WorldmapSprite.hava - работа со спрайтами.
 
 === Диаграмма классов ===
-http://code.google.com/p/gamedeveloping-android-project/source/browse/wiki/WorldmapUML.png
+http://gamedeveloping-android-project.googlecode.com/svn/wiki/WorldmapUML.png
