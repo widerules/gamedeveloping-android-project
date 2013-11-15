@@ -4,7 +4,7 @@
     <list default="true" readonly="true" id="4dddb735-8945-403b-b4c4-03f6ebc944ca" name="Default" comment="" />
     <ignored path="java-cgdk.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/fragment.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384348348045" ignored="false" />
+    <file path="/fragment.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384548042452" ignored="false" />
     <file path="/a.dummy" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1380176295315" ignored="false" />
     <file path="/Game.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376296036257" ignored="false" />
     <file path="C:/gameserver/src/main/java/com/codegame/gameserver/impl/codetroopers2013/model/Game.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376296073963" ignored="false" />
@@ -15,7 +15,7 @@
     <file path="/Effect.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376035285291" ignored="false" />
     <file path="C:/gameserver/src/main/java/com/codegame/gameserver/impl/codetroopers2013/model/Effect.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376035285291" ignored="false" />
     <file path="/Strategy.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376038029486" ignored="false" />
-    <file path="/MyStrategy.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384371392973" ignored="false" />
+    <file path="/MyStrategy.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384548544560" ignored="false" />
     <file path="/ActionType.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376036870868" ignored="false" />
     <file path="C:/gameserver/src/main/java/com/codegame/gameserver/impl/codetroopers2013/model/ActionType.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376045034585" ignored="false" />
     <file path="/BonusType.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376037038832" ignored="false" />
@@ -273,7 +273,7 @@
     <file path="/AdvancedQuickStartStrategy.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1381227955775" ignored="false" />
     <file path="/TestStrategy.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1381221680294" ignored="false" />
     <file path="/Node.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384261184558" ignored="false" />
-    <file path="/PathFinder.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384361140411" ignored="false" />
+    <file path="/PathFinder.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384541893542" ignored="false" />
     <file path="D:/liferay-sdk/portlets/serviceorder-portlet-maven/src/main/java/ru/barsopen/mais/constants/LRKeys.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384254407112" ignored="false" />
     <file path="/phk-book-search.jsp" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384255518968" ignored="false" />
     <file path="D:/liferay-sdk/portlets/serviceorder-portlet-maven/src/main/webapp/jsp/phk-portlet/phk-book-search.jsp" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384255527916" ignored="false" />
@@ -298,7 +298,6 @@
     <file path="/NodeKeeper.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384264278899" ignored="false" />
     <file path="/BonusComparator.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384270788047" ignored="false" />
     <file path="$PROJECT_DIR$/src/main/java/model/Direction.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384306982945" ignored="false" />
-    <file path="$PROJECT_DIR$/src/main/java/model/Game.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384306982945" ignored="false" />
     <file path="$PROJECT_DIR$/src/main/java/model/Bonus.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384306982945" ignored="false" />
     <file path="$PROJECT_DIR$/src/main/java/model/Trooper.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384306982945" ignored="false" />
     <file path="/ViewAnalyzer.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1384352409549" ignored="false" />
@@ -316,6 +315,23 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
+      <breakpoint url="file://$PROJECT_DIR$/src/main/java/MyStrategy.java" line="190" class="MyStrategy" package="">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="world.getTroopers().length!=3&#13;&#13;JAVA" />
+        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
+      </breakpoint>
+    </line_breakpoints>
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -352,7 +368,6 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
@@ -366,7 +381,7 @@
       <file leaf-file-name="MyStrategy.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/MyStrategy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="329" column="101" selection-start="13020" selection-end="13020" vertical-scroll-proportion="4.914242">
+            <state line="542" column="0" selection-start="21841" selection-end="21841" vertical-scroll-proportion="0.45293072">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -374,10 +389,19 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Game.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/model/Game.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="291" column="20" selection-start="11333" selection-end="11333" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Move.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/model/Move.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="16" selection-start="998" selection-end="998" vertical-scroll-proportion="0.0">
+            <state line="23" column="16" selection-start="527" selection-end="527" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -404,7 +428,7 @@
       <file leaf-file-name="PathFinder.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/PathFinder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="113" column="99" selection-start="3517" selection-end="3517" vertical-scroll-proportion="0.0">
+            <state line="137" column="16" selection-start="4361" selection-end="4361" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -414,9 +438,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/ViewAnalyzer.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="25" column="20" selection-start="563" selection-end="563" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -511,6 +533,16 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -554,28 +586,18 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="81" />
-    <property name="project.structure.last.edited" value="Project" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="81" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="75" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="82" />
     <property name="OverrideImplement.combined" value="true" />
-    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="82" />
+    <property name="project.structure.proportion" value="0.0" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder1" value="1" />
+    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder0" value="0" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder2" value="2" />
@@ -592,24 +614,24 @@
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth3" value="86" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="116" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="756" />
     <property name="GoToClass.includeLibraries" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="756" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="options.lastSelected" value="preferences.pluginManager" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
+    <property name="options.lastSelected" value="preferences.pluginManager" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder1" value="1" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="options.searchVisible" value="true" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RunManager" selected="Application.Runner">
     <configuration default="false" name="Runner" type="Application" factoryName="Application" temporary="true">
@@ -654,6 +676,19 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -680,19 +715,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -794,7 +816,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -807,11 +829,11 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942554" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32887402" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3282532" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20651014" sideWeight="0.36818686" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20651014" sideWeight="0.3192436" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20651014" sideWeight="0.38709676" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24471635" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20651014" sideWeight="0.33481646" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3448276" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="JRebel Executor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -928,13 +950,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/model/Game.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="42" selection-start="3055" selection-end="3068" vertical-scroll-proportion="0.31680775">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/model/Trooper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="168" column="64" selection-start="4663" selection-end="4663" vertical-scroll-proportion="0.25997582">
@@ -963,20 +978,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/model/Unit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="0" selection-start="1335" selection-end="1335" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/model/Move.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="16" selection-start="998" selection-end="998" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Node.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="58" column="20" selection-start="1163" selection-end="1163" vertical-scroll-proportion="0.0">
@@ -987,22 +988,41 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/ViewAnalyzer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="25" column="20" selection-start="563" selection-end="563" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/model/Unit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="53" column="0" selection-start="1335" selection-end="1335" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/model/Move.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="16" selection-start="527" selection-end="527" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/PathFinder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="99" selection-start="3517" selection-end="3517" vertical-scroll-proportion="0.0">
+        <state line="137" column="16" selection-start="4361" selection-end="4361" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/model/Game.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="291" column="20" selection-start="11333" selection-end="11333" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/MyStrategy.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="329" column="101" selection-start="13020" selection-end="13020" vertical-scroll-proportion="4.914242">
+        <state line="542" column="0" selection-start="21841" selection-end="21841" vertical-scroll-proportion="0.45293072">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
