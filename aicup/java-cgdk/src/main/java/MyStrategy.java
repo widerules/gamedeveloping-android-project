@@ -8,28 +8,14 @@ public final class MyStrategy implements Strategy {
 
     private static Trooper primary = null;
 
-    private static int a = 0;
-
-    private static Trooper medic = null;
-    private static Move medicMove = null;
-
-    private static int soldierDestX = 0;
-    private static int soldierDestY = 0;
-
-    private static Node pathNode = null;
-
-
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
         System.out.println("Start for: " + self.getType() + " with ap:" + self.getActionPoints());
-//        System.out.println("test a "+a++);
 
         PathFinder pf = new PathFinder(world);
 
         if (self.getType().equals(TrooperType.FIELD_MEDIC)) {
             medicTactic(self, world, game, move, pf);
-            medic = self;
-            medicMove = move;
             return;
         }
 
@@ -61,29 +47,6 @@ public final class MyStrategy implements Strategy {
         move.setAction(ActionType.MOVE);
         move.setDirection(pf.getDirection(self, world, 15, 10, 3));
     }
-
-
-    private static int stepsToGo;
-    private static int resqueX;
-    private static int resqueY;
-    public void toTheRescue(Trooper self, World world, Game game, Move move, PathFinder pf) {
-        if (stepsToGo>0&&self.getActionPoints()>=game.getStandingMoveCost()){
-            for (Trooper t : world.getTroopers()){
-                if (!t.isTeammate()){
-                    resqueX = random.nextInt(30);
-                    resqueY = random.nextInt(20);
-                }
-            }
-
-            move.setAction(ActionType.MOVE);
-            move.setDirection(pf.getDirection(self,world,resqueX,resqueY,3));
-            stepsToGo--;
-            return;
-        }
-    }
-
-
-
 
     public Trooper getEnemy(Trooper self, World world, Game game, Move move) {
         for (Trooper t : world.getTroopers()) {
@@ -129,7 +92,7 @@ public final class MyStrategy implements Strategy {
 //        ViewAnalyzer va = new ViewAnalyzer(world);
 //        va.analyze(self, world, game, move);
 
-        if (self.getHitpoints() < 71 && self.isHoldingMedikit()) {
+        if (self.getHitpoints() < 60 && self.isHoldingMedikit()) {
             if (self.getActionPoints() >= game.getMedikitUseCost()) {
                 System.out.println("use medikit");
                 move.setAction(ActionType.USE_MEDIKIT);
@@ -161,7 +124,7 @@ public final class MyStrategy implements Strategy {
                     move.setX(enemy.getX());
                     move.setY(enemy.getY());
                     return;
-                }else if (self.getStance().equals(TrooperStance.STANDING)){
+                }else{
                     System.out.println("come close");
                     move.setAction(ActionType.MOVE);
                     move.setDirection(pf.getDirection(self, world, enemy.getX(), enemy.getY(), 5));
@@ -169,13 +132,13 @@ public final class MyStrategy implements Strategy {
                 }
             }
 
-//            if (!self.getStance().equals(TrooperStance.PRONE)
-//                && self.getActionPoints()>=game.getStanceChangeCost()){
-//                System.out.println("get low");
-//                move.setAction(ActionType.LOWER_STANCE);
-//                move.setDirection(Direction.CURRENT_POINT);
-//                return;
-//            }
+            if (!self.getStance().equals(TrooperStance.PRONE)
+                && self.getActionPoints()>=game.getStanceChangeCost()){
+                System.out.println("get low");
+                move.setAction(ActionType.LOWER_STANCE);
+                move.setDirection(Direction.CURRENT_POINT);
+                return;
+            }
             if (self.getActionPoints() >= self.getShootCost()) {
                 System.out.println("try shoot");
                 move.setAction(ActionType.SHOOT);
@@ -192,13 +155,13 @@ public final class MyStrategy implements Strategy {
             return;
         }
 
-//        if (!self.getStance().equals(TrooperStance.STANDING)
-//                && self.getActionPoints()>=game.getStanceChangeCost()){
-//            System.out.println("get up");
-//            move.setAction(ActionType.RAISE_STANCE);
-//            move.setDirection(Direction.CURRENT_POINT);
-//            return;
-//        }
+        if (!self.getStance().equals(TrooperStance.STANDING)
+                && self.getActionPoints()>=game.getStanceChangeCost()){
+            System.out.println("get up");
+            move.setAction(ActionType.RAISE_STANCE);
+            move.setDirection(Direction.CURRENT_POINT);
+            return;
+        }
 
         //выключено чтобы не запирать солдата в туннелях
         if (followSoldier(self, world, game, move)){
@@ -206,24 +169,17 @@ public final class MyStrategy implements Strategy {
             return;
         }
 
-
         if (self.getActionPoints() >= game.getStandingMoveCost()) {
-            move.setAction(ActionType.MOVE);
-            Bonus bonus = getNearestBonus(self, world, self.isHoldingMedikit(), self.isHoldingGrenade(), self.isHoldingFieldRation());
-            if (null != bonus && isBonusReachable(bonus, world)) {
-                System.out.println("trying to collect bonus");
-                move.setDirection(pf.getDirection(self, world, bonus.getX(), bonus.getY(), 0));
-                return;
-            }
-
             System.out.println("try move");
+            move.setAction(ActionType.MOVE);
+//            move.setDirection(pf.getDirection(self, world, 15, 10, 3));
             move.setDirection(getCWDirection(self, world, game, move, pf));
             return;
         }
     }
 
     private void soldierTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
-        if (self.getHitpoints() < 71 && self.isHoldingMedikit()) {
+        if (self.getHitpoints() < 60 && self.isHoldingMedikit()) {
             if (self.getActionPoints() >= game.getMedikitUseCost()) {
                 System.out.println("use medikit");
                 move.setAction(ActionType.USE_MEDIKIT);
@@ -287,17 +243,7 @@ public final class MyStrategy implements Strategy {
         } else {
             System.out.println("move");
 //            move.setDirection(pf.getDirection(self, world, 15, 10, 3));
-
-
-            Direction direction = Direction.CURRENT_POINT;
-            Trooper medic = getMedic(self, world, game, move);
-            Trooper commander =getCommander(self, world, game, move);
-            if (medic!=null&&commander!=null&&self.getDistanceTo(medic)>5 || self.getDistanceTo(commander)>5){
-                direction = Direction.CURRENT_POINT;
-            }else{
-                direction = getCWDirection(self, world, game, move, pf);
-            }
-
+            Direction direction = getCWDirection(self, world, game, move, pf);
 //            if (direction.equals(Direction.CURRENT_POINT)){
 //                move.setDirection(pf.getDirection(self, world, 15, 10, 3));
 //            }else {
@@ -320,22 +266,22 @@ public final class MyStrategy implements Strategy {
         Direction ret = Direction.CURRENT_POINT;
         if (self.getX() < 20 && self.getY() < 5) {
             System.out.println("trying to move to 29 0");
-            ret = pf.getDirection(self, world, 29, 0, 2);
-        } else if (self.getX() > 15 && self.getY() < 17) {
+            ret = pf.getDirection(self, world, 29, 0, 1);
+        } else if (self.getX() >= 15 && self.getY() < 17) {
             System.out.println("trying to move to 25 19");
-            ret =  pf.getDirection(self, world, 25, 19, 2);
-        } else if (self.getX() > 5 && self.getY() > 17) {
+            ret =  pf.getDirection(self, world, 25, 19, 1);
+        } else if (self.getX() > 5 && self.getY() >= 17) {
             System.out.println("trying to move to 0 19");
-            ret =  pf.getDirection(self, world, 0, 19, 2);
-        } else if (self.getX() < 15 && self.getY() > 5) {
+            ret =  pf.getDirection(self, world, 0, 19, 1);
+        } else if (self.getX() < 15 && self.getY() >= 5) {
             System.out.println("trying to move to 0 0");
-            ret =  pf.getDirection(self, world, 0, 0, 2);
+            ret =  pf.getDirection(self, world, 0, 0, 1);
         } else {
             System.out.println("trying to move to 15 10");
-            ret =  pf.getDirection(self, world, 15, 10, 3);
+            ret =  pf.getDirection(self, world, 15, 10, 1);
         }
         if (ret.equals(Direction.CURRENT_POINT)){
-            ret =  pf.getDirection(self, world, random.nextInt(30), random.nextInt(20), 2);
+            ret =  pf.getDirection(self, world, random.nextInt(30), random.nextInt(20), 1);
         }
         return ret;
     }
@@ -359,24 +305,7 @@ public final class MyStrategy implements Strategy {
         return bonuses.isEmpty() ? null : bonuses.pollFirst();
     }
 
-
     private void medicTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
-        if  (stepsToGo!=0){
-            toTheRescue(self, world, game, move, pf);
-            return;
-        }
-
-        if (medic!=null && medicMove.getAction().equals(ActionType.HEAL)
-                &&medic.getHitpoints()> self.getHitpoints()){
-            System.out.println("init resque");
-            stepsToGo = 4;
-            resqueX = random.nextInt(30);
-            resqueY = random.nextInt(20);
-            toTheRescue(self, world, game, move, pf);
-        }
-
-//        System.out.println("Medic: "+medic.getX() + " "+medic.getY());
-
         if (self.getHitpoints() < 50 && self.isHoldingMedikit()) {
             if (self.getActionPoints() >= game.getMedikitUseCost()) {
                 move.setAction(ActionType.USE_MEDIKIT);
@@ -539,15 +468,6 @@ public final class MyStrategy implements Strategy {
     private Trooper getSoldier(Trooper self, World world, Game game, Move move) {
         for (Trooper t : world.getTroopers()) {
             if (t.isTeammate() && t.getType().equals(TrooperType.SOLDIER)) {
-                return t;
-            }
-        }
-        return null;
-    }
-
-    private Trooper getMedic(Trooper self, World world, Game game, Move move) {
-        for (Trooper t : world.getTroopers()) {
-            if (t.isTeammate() && t.getType().equals(TrooperType.FIELD_MEDIC)) {
                 return t;
             }
         }
