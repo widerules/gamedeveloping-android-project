@@ -1,15 +1,40 @@
 import model.*;
 
-import java.util.LinkedList;
-import java.util.Random;
-import java.util.TreeSet;
+import java.util.*;
 
 public final class MyStrategy implements Strategy {
     private final Random random = new Random();
 
+    private static HashMap<Integer, Integer> previousSteps;
+    private static int lastMoveIndex = -1;
+    private static HashSet<ActionType> prevActions = null;
+    private static Move prevMove = null;
+    private boolean stucked = false;
+
+    private static TrooperType primaryType = null;
+    private static long primaryId = -1;
+
+
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
+        if (previousSteps==null){
+            previousSteps = new HashMap<>();
+            prevActions = new HashSet<>();
+        }
+        if (lastMoveIndex != world.getMoveIndex()){
+            lastMoveIndex = world.getMoveIndex();
+            System.out.println(previousSteps.toString());
+            previousSteps.clear();
+            prevActions.clear();
+        }
+
+
+
+
         System.out.println("");
+        System.out.println("Stats: "+prevActions.toString() + "; size"+previousSteps.size());
+
+
         System.out.println(self.getType() + " with ap:" + self.getActionPoints());
 
         PathFinder pf = new PathFinder(world);
@@ -20,6 +45,24 @@ public final class MyStrategy implements Strategy {
         }
 
         if (self.getType().equals(TrooperType.SOLDIER)) {
+            if (prevActions!=null && prevActions.size()==1 && prevActions.contains(ActionType.MOVE)
+                    &&previousSteps.size()==2 && self.getActionPoints()<2){
+                stucked=true;
+            }
+
+            int coordUID = self.getX()*100+self.getY();
+
+            Integer cellInMap = previousSteps.get(coordUID);
+            if (cellInMap==null){
+                previousSteps.put(coordUID, 1);
+            }else{
+                previousSteps.put(coordUID, cellInMap+1);
+            }
+            if (prevMove!=null){
+                prevActions.add(prevMove.getAction());
+            }
+            prevMove = move;
+
             soldierTactic(self, world, game, move, pf);
             return;
         }
@@ -49,6 +92,8 @@ public final class MyStrategy implements Strategy {
     }
 
     public Trooper getEnemy(Trooper self, World world, Game game, Move move) {
+//        primary.getTeammateIndex()
+
         LinkedList<Trooper> trooperLinkedList = new LinkedList<>();
         for (Trooper t : world.getTroopers()) {
             if (!t.isTeammate()) {
@@ -56,6 +101,12 @@ public final class MyStrategy implements Strategy {
                         t.getX(), t.getY(), t.getStance())) {
                     trooperLinkedList.add(t);
                 }
+            }
+        }
+
+        for (Trooper t: trooperLinkedList){
+            if (t.getHitpoints() <= self.getDamage()){
+                return t;
             }
         }
 
@@ -123,15 +174,29 @@ public final class MyStrategy implements Strategy {
 
         Trooper enemy = getEnemy(self, world, game, move);
 
+        Trooper primary = getPrimary(self, world, game, move);
+        if (primary != null){
+            enemy = primary;
+            if (!world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
+                    primary.getX(), primary.getY(), primary.getStance())){
+                System.out.println("come close to primary");
+                move.setAction(ActionType.MOVE);
+                move.setDirection(pf.getDirectionReachable(self, world, enemy.getX(), enemy.getY(),enemy.getStance(), self.getShootingRange()-0.5));
+                return;
+            }
+        }
 
 
         if (null != enemy && enemy.getHitpoints() > 0) {
             if (self.getActionPoints() >= game.getGrenadeThrowCost() && self.isHoldingGrenade()){
-                if( self.getDistanceTo(enemy) < game.getGrenadeThrowRange()) {
+                System.out.println("==> "+self.getDistanceTo(enemy));
+                if( self.getDistanceTo(enemy) <= game.getGrenadeThrowRange()) {
                     System.out.println("grenade!" + game.getGrenadeThrowCost());
                     move.setAction(ActionType.THROW_GRENADE);
                     move.setX(enemy.getX());
                     move.setY(enemy.getY());
+                    primaryId = enemy.getPlayerId();
+                    primaryType = enemy.getType();
                     return;
                 }else if (self.getActionPoints() >= game.getGrenadeThrowCost()+moveCost(self, game)){
                     System.out.println("come close");
@@ -141,13 +206,16 @@ public final class MyStrategy implements Strategy {
                 }
             }
 
-            if (kneelTrooper(self, world, game, move, enemy)) return;
+//            if (kneelTrooper(self, world, game, move, enemy)) return;
+            if (changeStance(self, game, move)) return;
 
             if (self.getActionPoints() >= self.getShootCost()) {
                 System.out.println("try shoot");
                 move.setAction(ActionType.SHOOT);
                 move.setX(enemy.getX());
                 move.setY(enemy.getY());
+                primaryId = enemy.getPlayerId();
+                primaryType = enemy.getType();
                 return;
             }
         }
@@ -178,19 +246,35 @@ public final class MyStrategy implements Strategy {
 //        if (collectBonus(self, world, move, pf)) return;
 
         if (self.getActionPoints() >= game.getStandingMoveCost()) {
-            System.out.println("try move");
+            Direction direction = Direction.CURRENT_POINT;
+            Trooper medic = getMedic(self, world, game, move);
+            Trooper soldier =getSoldier(self, world, game, move);
+            if (medic!=null&&soldier!=null&&
+                    (self.getDistanceTo(medic)>4 || self.getDistanceTo(soldier)>4)){
+                if (gotoSpottedEnemy(self, world, game, move, pf)) return;
+                direction = pf.getDirection(self,world,soldier.getX(), soldier.getY(), 1);
+            }else{
+                direction = getCWDirection(self, world, game, move, pf);
+            }
             move.setAction(ActionType.MOVE);
-            move.setDirection(getCWDirection(self, world, game, move, pf));
-            return;
+            move.setDirection(direction);
         }
+
+
+//        if (self.getActionPoints() >= game.getStandingMoveCost()) {
+//            System.out.println("try move");
+//            move.setAction(ActionType.MOVE);
+//            move.setDirection(getCWDirection(self, world, game, move, pf));
+//            return;
+//        }
     }
 
     private boolean gotoSpottedEnemy(Trooper self, World world, Game game, Move move, PathFinder pf) {
-        System.out.println("go to spotted enemy");
+//        System.out.println("go to spotted enemy");
         if (self.getActionPoints()>=moveCost(self,game)){
             for (Trooper t : world.getTroopers()){
                 if (!t.isTeammate()){
-                    System.out.print(": enemy spotted \n");
+                    System.out.print("enemy spotted! \n");
                     move.setAction(ActionType.MOVE);
                     move.setDirection(pf.getDirectionReachable(self, world, t.getX(), t.getY(), t.getStance(), self.getShootingRange()-1));
                     return true;
@@ -217,15 +301,33 @@ public final class MyStrategy implements Strategy {
 
 //        Trooper enemy = primary!=null&&self.getDistanceTo(primary)<=self.getShootingRange()?primary:getEnemy(self, world, game, move);
         Trooper enemy = getEnemy(self, world, game, move);
+
+
+        Trooper primary = getPrimary(self, world, game, move);
+        if (primary != null){
+            enemy = primary;
+            if (!world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
+                    primary.getX(), primary.getY(), primary.getStance())){
+                System.out.println("come close to primary");
+                move.setAction(ActionType.MOVE);
+                move.setDirection(pf.getDirectionReachable(self, world, enemy.getX(), enemy.getY(),enemy.getStance(), self.getShootingRange()-0.5));
+                return;
+            }
+        }
+
+
+
         if (null != enemy && enemy.getHitpoints() > 0) {
 //            System.out.println("Enemy: "+enemy.isHoldingMedikit()+ " "+enemy.isHoldingFieldRation()+" "+enemy.getHitpoints());
 //            System.out.println("killing enemy");
             if (self.getActionPoints() >= game.getGrenadeThrowCost() && self.isHoldingGrenade()){
-                if( self.getDistanceTo(enemy) < game.getGrenadeThrowRange()) {
+                if( self.getDistanceTo(enemy) <= game.getGrenadeThrowRange()) {
                     System.out.println("grenade!" + game.getGrenadeThrowCost());
                     move.setAction(ActionType.THROW_GRENADE);
                     move.setX(enemy.getX());
                     move.setY(enemy.getY());
+                    primaryId = enemy.getPlayerId();
+                    primaryType = enemy.getType();
                     return;
                 }else if (self.getActionPoints() >= game.getGrenadeThrowCost()+moveCost(self, game)){
                     System.out.println("come close");
@@ -235,13 +337,17 @@ public final class MyStrategy implements Strategy {
                 }
             }
 
-            if (kneelTrooper(self, world, game, move, enemy)) return;
+//            if (kneelTrooper(self, world, game, move, enemy)) return;
+
+            if (changeStance(self, game, move)) return;
 
             if (self.getActionPoints() >= self.getShootCost()) {
                 System.out.println("shoot!");
                 move.setAction(ActionType.SHOOT);
                 move.setX(enemy.getX());
                 move.setY(enemy.getY());
+                primaryId = enemy.getPlayerId();
+                primaryType = enemy.getType();
                 return;
             }
         }
@@ -271,6 +377,17 @@ public final class MyStrategy implements Strategy {
 
         if (gotoSpottedEnemy(self, world, game, move, pf)) return;
 
+        if (stucked && self.getActionPoints() >= moveCost(self, game)){
+            move.setAction(ActionType.MOVE);
+            if (random.nextBoolean()) {
+                move.setDirection(random.nextBoolean() ? Direction.NORTH : Direction.SOUTH);
+            } else {
+                move.setDirection(random.nextBoolean() ? Direction.WEST : Direction.EAST);
+            }
+            stucked = false;
+            return;
+        }
+
         if (collectBonus(self, world, move, pf)) return;
 
 
@@ -290,6 +407,17 @@ public final class MyStrategy implements Strategy {
 
         move.setDirection(direction);
 
+    }
+
+    private boolean changeStance(Trooper self, Game game, Move move) {
+        TrooperStance trooperStance = getBestDMGStance(self, game);
+        if (!self.getStance().equals(trooperStance)){
+            System.out.println("change stance from "+self.getStance()+" to "+trooperStance);
+            move.setAction(getAction(self.getStance(), trooperStance));
+            move.setDirection(Direction.CURRENT_POINT);
+            return true;
+        }
+        return false;
     }
 
     private boolean collectBonus(Trooper self, World world, Move move, PathFinder pf) {
@@ -328,6 +456,53 @@ public final class MyStrategy implements Strategy {
         };
         return game.getProneMoveCost();
     }
+
+    private ActionType getAction(TrooperStance start, TrooperStance end){
+        if (start.equals(end)){
+            return null;
+        }
+        switch (start){
+            case KNEELING:
+                if (end.equals(TrooperStance.STANDING)){
+                    return ActionType.RAISE_STANCE;
+                }else{
+                    return ActionType.LOWER_STANCE;
+                }
+            case PRONE:
+                return ActionType.RAISE_STANCE;
+            case STANDING:
+                return ActionType.LOWER_STANCE;
+        };
+        return null;
+    }
+
+    private TrooperStance getBestDMGStance(Trooper t, Game game){
+        int standingDmg = t.getStandingDamage();
+        int kneelingDmg = t.getKneelingDamage();
+        int proneDmg = t.getProneDamage();
+        switch (t.getStance()){
+            case KNEELING:
+                kneelingDmg = t.getActionPoints()/t.getShootCost()*t.getKneelingDamage();
+                proneDmg = (t.getActionPoints()-game.getStanceChangeCost())/t.getShootCost()*t.getProneDamage();
+                if (proneDmg>kneelingDmg){
+                    return TrooperStance.PRONE;
+                }else{
+                    return TrooperStance.KNEELING;
+                }
+            case PRONE:
+                return TrooperStance.PRONE;
+            case STANDING:
+                standingDmg = t.getActionPoints()/t.getShootCost()*t.getStandingDamage();
+                kneelingDmg = (t.getActionPoints()-game.getStanceChangeCost())/t.getShootCost()*t.getKneelingDamage();
+                if (kneelingDmg>standingDmg){
+                    return TrooperStance.KNEELING;
+                }
+                return TrooperStance.STANDING;
+        };
+
+        return TrooperStance.PRONE;
+    }
+
 
     private boolean isKneelingBetter(Trooper t, Game game){
         if (t.getActionPoints()>game.getStanceChangeCost()){
@@ -381,26 +556,6 @@ public final class MyStrategy implements Strategy {
 
         Direction ret = Direction.CURRENT_POINT;
         ret = pf.getDirection(self, world, nextWPX, nextWPY, 3);
-
-//        if (self.getX() < 20 && self.getY() < 5) {
-//            System.out.println("trying to move to 29 0");
-//            ret = pf.getDirection(self, world, 29, 0, 1);
-//        } else if (self.getX() >= 15 && self.getY() < 17) {
-//            System.out.println("trying to move to 25 19");
-//            ret =  pf.getDirection(self, world, 25, 19, 1);
-//        } else if (self.getX() > 5 && self.getY() >= 17) {
-//            System.out.println("trying to move to 0 19");
-//            ret =  pf.getDirection(self, world, 0, 19, 1);
-//        } else if (self.getX() < 15 && self.getY() >= 5) {
-//            System.out.println("trying to move to 0 0");
-//            ret =  pf.getDirection(self, world, 0, 0, 1);
-//        } else {
-//            System.out.println("trying to move to 15 10");
-//            ret =  pf.getDirection(self, world, 15, 10, 1);
-//        }
-//        if (ret.equals(Direction.CURRENT_POINT)){
-//            ret =  pf.getDirection(self, world, random.nextInt(30), random.nextInt(20), 1);
-//        }
         return ret;
     }
 
@@ -434,8 +589,21 @@ public final class MyStrategy implements Strategy {
         return ret;
     }
 
+    private Trooper getPrimary(Trooper self, World world, Game game, Move move){
+        if (primaryId>=0 && primaryType !=null){
+            for (Trooper t : world.getTroopers()){
+                if (t.getPlayerId()==primaryId && t.getType().equals(primaryType)){
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
+
     private void medicTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
         Trooper soldier = getSoldier(self, world, game, move);
+        Trooper enemy = getEnemy(self, world, game, move);
+
 
         if (getFriendlyCount(self, world, game, move)!=1){
             if (self.getHitpoints() < 50 && self.isHoldingMedikit()) {
@@ -446,7 +614,15 @@ public final class MyStrategy implements Strategy {
                 }
             }
 
-            if (self.getHitpoints() < 80) {
+
+
+//
+//            if (enemy!=null && enemy.getHitpoints()<(self.getDamage()*(self.getActionPoints()/self.getShootCost()))){
+//
+//            }
+
+
+            if (self.getHitpoints() < 50) {
                 if (self.getActionPoints() >= game.getFieldMedicHealCost()) {
                     move.setAction(ActionType.HEAL);
                     move.setDirection(Direction.CURRENT_POINT);
@@ -528,13 +704,12 @@ public final class MyStrategy implements Strategy {
 
 
 
-        Trooper enemy = getEnemy(self, world, game, move);
 
 
 
         if (null != enemy && enemy.getHitpoints() > 0) {
             if (self.getActionPoints() >= game.getGrenadeThrowCost() && self.isHoldingGrenade()){
-                if( self.getDistanceTo(enemy) < game.getGrenadeThrowRange()) {
+                if( self.getDistanceTo(enemy) <= game.getGrenadeThrowRange()) {
                     System.out.println("grenade!" + game.getGrenadeThrowCost());
                     move.setAction(ActionType.THROW_GRENADE);
                     move.setX(enemy.getX());
@@ -564,8 +739,16 @@ public final class MyStrategy implements Strategy {
             return;
         }
 
-        if (null != soldier && soldier.getHitpoints() > 0) {
-            if (self.getActionPoints() >= game.getStandingMoveCost()) {
+        if (self.getHitpoints() < self.getMaximalHitpoints()) {
+            if (self.getActionPoints() >= game.getFieldMedicHealCost()) {
+                move.setAction(ActionType.HEAL);
+                move.setDirection(Direction.CURRENT_POINT);
+                return;
+            }
+        }
+
+        if (self.getActionPoints() >= game.getStandingMoveCost()) {
+            if (null != soldier && soldier.getHitpoints() > 0) {
                 move.setAction(ActionType.MOVE);
                 Direction direction = pf.getDirection(self, world, soldier.getX(), soldier.getY(), 1);
                 if (direction.equals(Direction.CURRENT_POINT)){
@@ -574,14 +757,46 @@ public final class MyStrategy implements Strategy {
                 move.setDirection(direction);
                 return;
             }
+
+            Direction direction = Direction.CURRENT_POINT;
+            Trooper commander = getCommander(self, world, game, move);
+            if (commander!=null && commander.getHitpoints()>0 && self.getDistanceTo(commander)>4){
+                if (gotoSpottedEnemy(self, world, game, move, pf)) return;
+                direction = pf.getDirection(self,world,commander.getX(), commander.getY(), 1);
+                if (direction.equals(Direction.CURRENT_POINT)){
+                    direction = pf.getDirection(self,world,random.nextInt(30),random.nextInt(20),10);
+                }
+            }else{
+                direction = getCWDirection(self, world, game, move, pf);
+            }
+
+            move.setAction(ActionType.MOVE);
+            move.setDirection(direction);
         }
 
-        if (self.getActionPoints() >= game.getStandingMoveCost()) {
-            move.setAction(ActionType.MOVE);
-            move.setDirection(getCWDirection(self, world, game, move, pf));
-//            move.setDirection(pf.getDirection(self, world, 15, 10, 3));
-            return;
-        }
+
+
+//        if (self.getActionPoints() >= game.getStandingMoveCost()) {
+//            move.setAction(ActionType.MOVE);
+//            move.setDirection(getCWDirection(self, world, game, move, pf));
+//            return;
+//        }
+
+
+
+//        if (self.getActionPoints() >= game.getStandingMoveCost()) {
+//            Direction direction = Direction.CURRENT_POINT;
+//            Trooper commander = getCommander(self, world, game, move);
+//            if (commander!=null&&soldier!=null&&
+//                    (self.getDistanceTo(medic)>4 || self.getDistanceTo(soldier)>4)){
+//                if (gotoSpottedEnemy(self, world, game, move, pf)) return;
+//                direction = pf.getDirection(self,world,soldier.getX(), soldier.getY(), 1);
+//            }else{
+//                direction = getCWDirection(self, world, game, move, pf);
+//            }
+//            move.setAction(ActionType.MOVE);
+//            move.setDirection(direction);
+//        }
 
     }
 
