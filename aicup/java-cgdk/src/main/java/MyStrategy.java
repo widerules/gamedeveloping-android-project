@@ -246,27 +246,11 @@ public final class MyStrategy implements Strategy {
 //        if (collectBonus(self, world, move, pf)) return;
 
         if (self.getActionPoints() >= game.getStandingMoveCost()) {
-            Direction direction = Direction.CURRENT_POINT;
-            Trooper medic = getMedic(self, world, game, move);
-            Trooper soldier =getSoldier(self, world, game, move);
-            if (medic!=null&&soldier!=null&&
-                    (self.getDistanceTo(medic)>4 || self.getDistanceTo(soldier)>4)){
-                if (gotoSpottedEnemy(self, world, game, move, pf)) return;
-                direction = pf.getDirection(self,world,soldier.getX(), soldier.getY(), 1);
-            }else{
-                direction = getCWDirection(self, world, game, move, pf);
-            }
+            System.out.println("try move");
             move.setAction(ActionType.MOVE);
-            move.setDirection(direction);
+            move.setDirection(getCWDirection(self, world, game, move, pf));
+            return;
         }
-
-
-//        if (self.getActionPoints() >= game.getStandingMoveCost()) {
-//            System.out.println("try move");
-//            move.setAction(ActionType.MOVE);
-//            move.setDirection(getCWDirection(self, world, game, move, pf));
-//            return;
-//        }
     }
 
     private boolean gotoSpottedEnemy(Trooper self, World world, Game game, Move move, PathFinder pf) {
@@ -747,8 +731,8 @@ public final class MyStrategy implements Strategy {
             }
         }
 
-        if (self.getActionPoints() >= game.getStandingMoveCost()) {
-            if (null != soldier && soldier.getHitpoints() > 0) {
+        if (null != soldier && soldier.getHitpoints() > 0) {
+            if (self.getActionPoints() >= game.getStandingMoveCost()) {
                 move.setAction(ActionType.MOVE);
                 Direction direction = pf.getDirection(self, world, soldier.getX(), soldier.getY(), 1);
                 if (direction.equals(Direction.CURRENT_POINT)){
@@ -757,46 +741,13 @@ public final class MyStrategy implements Strategy {
                 move.setDirection(direction);
                 return;
             }
-
-            Direction direction = Direction.CURRENT_POINT;
-            Trooper commander = getCommander(self, world, game, move);
-            if (commander!=null && commander.getHitpoints()>0 && self.getDistanceTo(commander)>4){
-                if (gotoSpottedEnemy(self, world, game, move, pf)) return;
-                direction = pf.getDirection(self,world,commander.getX(), commander.getY(), 1);
-                if (direction.equals(Direction.CURRENT_POINT)){
-                    direction = pf.getDirection(self,world,random.nextInt(30),random.nextInt(20),10);
-                }
-            }else{
-                direction = getCWDirection(self, world, game, move, pf);
-            }
-
-            move.setAction(ActionType.MOVE);
-            move.setDirection(direction);
         }
 
-
-
-//        if (self.getActionPoints() >= game.getStandingMoveCost()) {
-//            move.setAction(ActionType.MOVE);
-//            move.setDirection(getCWDirection(self, world, game, move, pf));
-//            return;
-//        }
-
-
-
-//        if (self.getActionPoints() >= game.getStandingMoveCost()) {
-//            Direction direction = Direction.CURRENT_POINT;
-//            Trooper commander = getCommander(self, world, game, move);
-//            if (commander!=null&&soldier!=null&&
-//                    (self.getDistanceTo(medic)>4 || self.getDistanceTo(soldier)>4)){
-//                if (gotoSpottedEnemy(self, world, game, move, pf)) return;
-//                direction = pf.getDirection(self,world,soldier.getX(), soldier.getY(), 1);
-//            }else{
-//                direction = getCWDirection(self, world, game, move, pf);
-//            }
-//            move.setAction(ActionType.MOVE);
-//            move.setDirection(direction);
-//        }
+        if (self.getActionPoints() >= game.getStandingMoveCost()) {
+            move.setAction(ActionType.MOVE);
+            move.setDirection(getCWDirection(self, world, game, move, pf));
+            return;
+        }
 
     }
 
