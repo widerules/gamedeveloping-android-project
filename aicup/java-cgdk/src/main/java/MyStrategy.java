@@ -14,9 +14,27 @@ public final class MyStrategy implements Strategy {
     private static TrooperType primaryType = null;
     private static long primaryId = -1;
 
+    private static String mapName = null;
+
+    private static final String TANK_2012 = "tank2012";
+
 
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
+        if (mapName == null){
+            CellType[][] worldCells = world.getCells();
+            if (worldCells[1][2].equals(CellType.MEDIUM_COVER)
+                    &&worldCells[1][3].equals(CellType.MEDIUM_COVER)
+                    &&worldCells[1][4].equals(CellType.MEDIUM_COVER)
+                    &&worldCells[1][5].equals(CellType.MEDIUM_COVER)
+                    &&worldCells[1][6].equals(CellType.MEDIUM_COVER)
+                    &&worldCells[1][7].equals(CellType.MEDIUM_COVER)
+                    &&worldCells[1][8].equals(CellType.MEDIUM_COVER)){
+                mapName=TANK_2012;
+            }
+        }
+
+
         if (previousSteps==null){
             previousSteps = new HashMap<>();
             prevActions = new HashSet<>();
@@ -178,7 +196,8 @@ public final class MyStrategy implements Strategy {
         if (primary != null){
             enemy = primary;
             if (!world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
-                    primary.getX(), primary.getY(), primary.getStance())){
+                    primary.getX(), primary.getY(), primary.getStance())
+                    &&self.getActionPoints() >= moveCost(self, game)){
                 System.out.println("come close to primary");
                 move.setAction(ActionType.MOVE);
                 move.setDirection(pf.getDirectionReachable(self, world, enemy.getX(), enemy.getY(),enemy.getStance(), self.getShootingRange()-0.5));
@@ -228,7 +247,8 @@ public final class MyStrategy implements Strategy {
         }
 
         if (!self.getStance().equals(TrooperStance.STANDING)
-                && self.getActionPoints()>=game.getStanceChangeCost()){
+                && self.getActionPoints()>=game.getStanceChangeCost()
+                && !TANK_2012.equals(mapName)){
             System.out.println("get up");
             move.setAction(ActionType.RAISE_STANCE);
             move.setDirection(Direction.CURRENT_POINT);
@@ -291,7 +311,8 @@ public final class MyStrategy implements Strategy {
         if (primary != null){
             enemy = primary;
             if (!world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
-                    primary.getX(), primary.getY(), primary.getStance())){
+                    primary.getX(), primary.getY(), primary.getStance())
+                    &&self.getActionPoints() >= moveCost(self, game)){
                 System.out.println("come close to primary");
                 move.setAction(ActionType.MOVE);
                 move.setDirection(pf.getDirectionReachable(self, world, enemy.getX(), enemy.getY(),enemy.getStance(), self.getShootingRange()-0.5));
@@ -345,7 +366,8 @@ public final class MyStrategy implements Strategy {
         }
 
         if (!self.getStance().equals(TrooperStance.STANDING)
-                && self.getActionPoints()>=game.getStanceChangeCost()){
+                && self.getActionPoints()>=game.getStanceChangeCost()
+                && !TANK_2012.equals(mapName)){
             System.out.println("get up");
             move.setAction(ActionType.RAISE_STANCE);
             move.setDirection(Direction.CURRENT_POINT);
@@ -395,6 +417,9 @@ public final class MyStrategy implements Strategy {
 
     private boolean changeStance(Trooper self, Game game, Move move) {
         TrooperStance trooperStance = getBestDMGStance(self, game);
+        if(TANK_2012.equals(mapName)){
+            trooperStance = TrooperStance.PRONE;
+        }
         if (!self.getStance().equals(trooperStance)){
             System.out.println("change stance from "+self.getStance()+" to "+trooperStance);
             move.setAction(getAction(self.getStance(), trooperStance));
@@ -587,7 +612,6 @@ public final class MyStrategy implements Strategy {
     private void medicTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
         Trooper soldier = getSoldier(self, world, game, move);
         Trooper enemy = getEnemy(self, world, game, move);
-
 
         if (getFriendlyCount(self, world, game, move)!=1){
             if (self.getHitpoints() < 50 && self.isHoldingMedikit()) {
