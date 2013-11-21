@@ -165,6 +165,9 @@ public final class MyStrategy implements Strategy {
 
 
     private void commanderTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
+        if (TANK_2012.equals(mapName)){
+            if (changeStance(self, game, move)) return;
+        }
 //        System.out.println(self.getDistanceTo(self.getX() + 1, self.getY() + 1));
 
 //        ViewAnalyzer va = new ViewAnalyzer(world);
@@ -228,7 +231,10 @@ public final class MyStrategy implements Strategy {
 //            if (kneelTrooper(self, world, game, move, enemy)) return;
             if (changeStance(self, game, move)) return;
 
-            if (self.getActionPoints() >= self.getShootCost()) {
+            if (self.getActionPoints() >= self.getShootCost()
+                &&
+            world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
+                    enemy.getX(), enemy.getY(), enemy.getStance())) {
                 System.out.println("try shoot");
                 move.setAction(ActionType.SHOOT);
                 move.setX(enemy.getX());
@@ -289,6 +295,10 @@ public final class MyStrategy implements Strategy {
     }
 
     private void soldierTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
+        if (TANK_2012.equals(mapName)){
+            if (changeStance(self, game, move)) return;
+        }
+
         if (self.getHitpoints() < 70 && self.isHoldingMedikit()) {
             if (self.getActionPoints() >= game.getMedikitUseCost()) {
                 System.out.println("use medikit");
@@ -346,7 +356,9 @@ public final class MyStrategy implements Strategy {
 
             if (changeStance(self, game, move)) return;
 
-            if (self.getActionPoints() >= self.getShootCost()) {
+            if (self.getActionPoints() >= self.getShootCost()
+                    && world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
+                    enemy.getX(), enemy.getY(), enemy.getStance())) {
                 System.out.println("shoot!");
                 move.setAction(ActionType.SHOOT);
                 move.setX(enemy.getX());
@@ -420,7 +432,7 @@ public final class MyStrategy implements Strategy {
         if(TANK_2012.equals(mapName)){
             trooperStance = TrooperStance.PRONE;
         }
-        if (!self.getStance().equals(trooperStance)){
+        if (!self.getStance().equals(trooperStance) && self.getActionPoints()>=game.getStanceChangeCost()){
             System.out.println("change stance from "+self.getStance()+" to "+trooperStance);
             move.setAction(getAction(self.getStance(), trooperStance));
             move.setDirection(Direction.CURRENT_POINT);
