@@ -140,7 +140,7 @@ public final class MyStrategy implements Strategy {
     private boolean followSoldier(Trooper self, World world, Game game, Move move) {
         Trooper soldier = getSoldier(self, world, game, move);
         if (null != soldier && soldier.getHitpoints() > 1) {
-            if (self.getActionPoints() >= game.getStandingMoveCost()) {
+            if (self.getActionPoints() >= moveCost(self, game)) {
                 move.setAction(ActionType.MOVE);
                 PathFinder pf = new PathFinder(world);
                 Direction direction = pf.getDirection(self, world, soldier.getX(), soldier.getY(), 2);
@@ -265,7 +265,7 @@ public final class MyStrategy implements Strategy {
 
 //        if (collectBonus(self, world, move, pf)) return;
 
-        if (self.getActionPoints() >= game.getStandingMoveCost()) {
+        if (self.getActionPoints() >= moveCost(self, game)) {
             System.out.println("try move");
             move.setAction(ActionType.MOVE);
             move.setDirection(getCWDirection(self, world, game, move, pf));
@@ -375,7 +375,7 @@ public final class MyStrategy implements Strategy {
         }
 
 
-        if (self.getActionPoints() < game.getStandingMoveCost()) {
+        if (self.getActionPoints() < moveCost(self, game)) {
             System.out.println("exit");
             return;
         }
@@ -394,7 +394,7 @@ public final class MyStrategy implements Strategy {
             return;
         }
 
-        if (collectBonus(self, world, move, pf)) return;
+        if (collectBonus(self, world, game, move, pf)) return;
 
 
         System.out.println("move");
@@ -429,9 +429,9 @@ public final class MyStrategy implements Strategy {
         return false;
     }
 
-    private boolean collectBonus(Trooper self, World world, Move move, PathFinder pf) {
+    private boolean collectBonus(Trooper self, World world, Game game, Move move, PathFinder pf) {
         Bonus bonus = getNearestBonus(self, world, self.isHoldingMedikit(), self.isHoldingGrenade(), self.isHoldingFieldRation());
-        if (null != bonus && isBonusReachable(bonus, world)) {
+        if (null != bonus && isBonusReachable(bonus, world) && self.getActionPoints()>=moveCost(self, game)) {
             System.out.println("trying to collect bonus");
             move.setAction(ActionType.MOVE);
             move.setDirection(pf.getDirection(self, world, bonus.getX(), bonus.getY(), 0));
