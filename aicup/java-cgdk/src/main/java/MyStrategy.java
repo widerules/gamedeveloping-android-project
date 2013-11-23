@@ -18,8 +18,13 @@ public final class MyStrategy implements Strategy {
 
     private static final String TANK_2012 = "tank2012";
     private static final String MAZE_MAP = "MAZE_MAP";
+    private static final String DESERT_MAP = "DESERT_MAP";
 
     private static boolean goToBonus = false;
+
+    private boolean isDesertMap = false;
+    private boolean isTank2012Map = false;
+    private boolean isMazeMap = false;
 
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
@@ -40,9 +45,23 @@ public final class MyStrategy implements Strategy {
                     &&worldCells[12][9].equals(CellType.MEDIUM_COVER)
                     &&worldCells[12][10].equals(CellType.MEDIUM_COVER)){
                 mapName=MAZE_MAP;
+            } else if (worldCells[1][5].equals(CellType.HIGH_COVER)
+                    &&worldCells[1][6].equals(CellType.HIGH_COVER)
+                    &&worldCells[1][7].equals(CellType.HIGH_COVER)
+                    &&worldCells[1][8].equals(CellType.HIGH_COVER)
+                    &&worldCells[2][5].equals(CellType.HIGH_COVER)
+                    &&worldCells[2][6].equals(CellType.HIGH_COVER)
+                    &&worldCells[2][7].equals(CellType.HIGH_COVER)
+                    &&worldCells[2][8].equals(CellType.HIGH_COVER)
+                    ){
+                mapName = DESERT_MAP;
             }
         }
 
+
+        isDesertMap = DESERT_MAP.equals(mapName);
+        isTank2012Map = TANK_2012.equals(mapName);
+        isMazeMap = MAZE_MAP.equals(mapName);
 
         if (previousSteps==null){
             previousSteps = new HashMap<>();
@@ -147,12 +166,21 @@ public final class MyStrategy implements Strategy {
     }
 
     private boolean followSoldier(Trooper self, World world, Game game, Move move) {
+
         Trooper soldier = getSoldier(self, world, game, move);
         if (null != soldier && soldier.getHitpoints() > 1) {
             if (self.getActionPoints() >= moveCost(self, game)) {
                 move.setAction(ActionType.MOVE);
                 PathFinder pf = new PathFinder(world);
-                Direction direction = pf.getDirection(self, world, soldier.getX(), soldier.getY(), 2);
+
+                Direction direction = Direction.CURRENT_POINT;
+                if (isDesertMap){
+                    direction = pf.getDirection(self, world, soldier.getX(), soldier.getY(), 1);
+                }else{
+                    direction = pf.getDirection(self, world, soldier.getX(), soldier.getY(), 2);
+                }
+
+
                 if (direction.equals(Direction.CURRENT_POINT)){
                     Bonus bonus = getNearestBonus(self, world, self.isHoldingMedikit(), self.isHoldingGrenade(), self.isHoldingFieldRation());
                     if (null != bonus && isBonusReachable(bonus, world)) {
@@ -174,7 +202,7 @@ public final class MyStrategy implements Strategy {
 
 
     private void commanderTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
-        if (TANK_2012.equals(mapName)){
+        if (isTank2012Map){
             if (changeStance(self, game, move)) return;
         }
 //        System.out.println(self.getDistanceTo(self.getX() + 1, self.getY() + 1));
@@ -261,9 +289,17 @@ public final class MyStrategy implements Strategy {
             return;
         }
 
+        if (isTank2012Map && self.getActionPoints()>=moveCost(self,game)){
+            System.out.println("move to center. tank map");
+            move.setAction(ActionType.MOVE);
+            move.setDirection(pf.getDirection(self,world,15,10,8));
+            return;
+        }
+
+
         if (!self.getStance().equals(TrooperStance.STANDING)
                 && self.getActionPoints()>=game.getStanceChangeCost()
-                && !TANK_2012.equals(mapName)){
+                && !isTank2012Map){
             System.out.println("get up");
             move.setAction(ActionType.RAISE_STANCE);
             move.setDirection(Direction.CURRENT_POINT);
@@ -309,7 +345,7 @@ public final class MyStrategy implements Strategy {
 
     private void soldierTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
         goToBonus = false;
-        if (TANK_2012.equals(mapName)){
+        if (isTank2012Map){
             if (changeStance(self, game, move)) return;
         }
 
@@ -352,7 +388,7 @@ public final class MyStrategy implements Strategy {
 //            System.out.println("killing enemy");
             if (self.getActionPoints() >= game.getGrenadeThrowCost() && self.isHoldingGrenade()){
                 if( self.getDistanceTo(enemy) <= game.getGrenadeThrowRange()) {
-                    System.out.println("grenade!" + game.getGrenadeThrowCost());
+                    System.out.println("grenade!");
                     move.setAction(ActionType.THROW_GRENADE);
                     move.setX(enemy.getX());
                     move.setY(enemy.getY());
@@ -394,7 +430,7 @@ public final class MyStrategy implements Strategy {
 
         if (!self.getStance().equals(TrooperStance.STANDING)
                 && self.getActionPoints()>=game.getStanceChangeCost()
-                && !TANK_2012.equals(mapName)){
+                && !isTank2012Map){
             System.out.println("get up");
             move.setAction(ActionType.RAISE_STANCE);
             move.setDirection(Direction.CURRENT_POINT);
@@ -407,7 +443,7 @@ public final class MyStrategy implements Strategy {
             return;
         }
 
-        if (TANK_2012.equals(mapName)){
+        if (isTank2012Map){
             if (self.getActionPoints()>=moveCost(self,game)){
                 move.setAction(ActionType.MOVE);
                 move.setDirection(pf.getDirection(self, world, 15, 10, 9));
@@ -432,7 +468,7 @@ public final class MyStrategy implements Strategy {
 
         Trooper commander = getCommander(self, world, game, move);
 
-        if (!MAZE_MAP.equals(mapName)){
+        if (!isMazeMap){
             if (commander!=null && commander.getHitpoints()>0){
                 if (getShortDistance(self, commander.getX(), commander.getY())>4.5){
                     move.setAction(ActionType.MOVE);
@@ -478,7 +514,7 @@ public final class MyStrategy implements Strategy {
 
     private boolean changeStance(Trooper self, Game game, Move move) {
         TrooperStance trooperStance = getBestDMGStance(self, game);
-        if(TANK_2012.equals(mapName)){
+        if(isTank2012Map){
             trooperStance = TrooperStance.PRONE;
         }
         if (!self.getStance().equals(trooperStance) && self.getActionPoints()>=game.getStanceChangeCost()){
@@ -608,7 +644,6 @@ public final class MyStrategy implements Strategy {
     private static boolean wpReached = false;
 
     private Direction getCWDirection(Trooper self, World world, Game game, Move move, PathFinder pf) {
-        boolean isMazeMap = MAZE_MAP.equals(mapName);
         wpReached = nextWPX>=0 && nextWPY>=0 && self.getDistanceTo(nextWPX,nextWPY)<=3;
         if (nextWPX<0 || nextWPY<0 || wpReached){
             if (self.getX() < 15 && self.getY() < 10){
@@ -617,6 +652,9 @@ public final class MyStrategy implements Strategy {
                 if (isMazeMap){
                     nextWPX = 23;
                     nextWPY = 5;
+                } else if (isDesertMap){
+                    nextWPX = 25;
+                    nextWPY = 0;
                 }
             }
             else if (self.getX() >= 15 && self.getY() < 10){
@@ -625,6 +663,9 @@ public final class MyStrategy implements Strategy {
                 if (isMazeMap){
                     nextWPX = 23;
                     nextWPY = 14;
+                } else if (isDesertMap){
+                    nextWPX = 25;
+                    nextWPY = 19;
                 }
             }
             else if (self.getX() >= 15 && self.getY() >= 10){
@@ -633,6 +674,9 @@ public final class MyStrategy implements Strategy {
                 if (isMazeMap){
                     nextWPX = 6;
                     nextWPY = 14;
+                } else if (isDesertMap){
+                    nextWPX = 4;
+                    nextWPY = 19;
                 }
             }
             else if (self.getX() < 15 && self.getY() >= 10){
@@ -642,6 +686,10 @@ public final class MyStrategy implements Strategy {
                     nextWPX = 6;
                     nextWPY = 5;
                 }
+                else if (isDesertMap){
+                    nextWPX = 4;
+                    nextWPY = 0;
+                }
             }
             else{
                 nextWPX = 15;
@@ -650,7 +698,11 @@ public final class MyStrategy implements Strategy {
         }
 
         Direction ret = Direction.CURRENT_POINT;
-        ret = pf.getDirection(self, world, nextWPX, nextWPY, 3);
+        if (isDesertMap){
+            ret = pf.getDirection(self, world, nextWPX, nextWPY, 2);
+        }else{
+            ret = pf.getDirection(self, world, nextWPX, nextWPY, 3);
+        }
         return ret;
     }
 
@@ -666,6 +718,13 @@ public final class MyStrategy implements Strategy {
             if (tmpB.getType().equals(BonusType.GRENADE) && excludeGrenade) continue;
             if (tmpB.getType().equals(BonusType.FIELD_RATION) && excludeFieldRation) continue;
 
+            if (isDesertMap){
+                if (tmpB.getX()==0 || tmpB.getX()==29){
+                    if(tmpB.getY()>3 && tmpB.getY()<26){
+                        continue;
+                    }
+                }
+            }
             bonuses.add(tmpB);
 //            return tmpB;
         }
