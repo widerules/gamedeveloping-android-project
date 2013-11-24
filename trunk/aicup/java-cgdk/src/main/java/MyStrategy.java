@@ -20,6 +20,7 @@ public final class MyStrategy implements Strategy {
     private static final String MAZE_MAP = "MAZE_MAP";
     private static final String DESERT_MAP = "DESERT_MAP";
     private static final String WHITE_MAP = "WHITE_MAP";
+    private static final String GREEN_CROSS = "GREEN_CROSS";
 
     private static boolean goToBonus = false;
 
@@ -27,6 +28,10 @@ public final class MyStrategy implements Strategy {
     private boolean isTank2012Map = false;
     private boolean isMazeMap = false;
     private boolean isWhiteMap = false;
+    private boolean isGreenCrossMap = false;
+
+
+    private boolean isCommanderLeader = false;
 
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
@@ -80,6 +85,12 @@ public final class MyStrategy implements Strategy {
                     &&worldCells[23][4].equals(CellType.HIGH_COVER)
                     ){
                 mapName = WHITE_MAP;
+            } else if (!worldCells[0][4].equals(CellType.FREE)
+                    &&!worldCells[4][0].equals(CellType.FREE)
+                    &&!worldCells[2][4].equals(CellType.FREE)
+                    &&!worldCells[4][2].equals(CellType.FREE)
+                    ){
+                mapName = GREEN_CROSS;
             }
         }
 
@@ -88,6 +99,10 @@ public final class MyStrategy implements Strategy {
         isTank2012Map = TANK_2012.equals(mapName);
         isMazeMap = MAZE_MAP.equals(mapName);
         isWhiteMap = WHITE_MAP.equals(mapName);
+        isGreenCrossMap = GREEN_CROSS.equals(mapName);
+
+
+        isCommanderLeader = isGreenCrossMap || isWhiteMap;
 
         if (previousSteps==null){
             previousSteps = new HashMap<>();
@@ -280,6 +295,44 @@ public final class MyStrategy implements Strategy {
     }
 
 
+
+    private boolean followCommander(Trooper self, World world, Game game, Move move) {
+
+        Trooper commander = getCommander(self, world, game, move);
+        if (null != commander && commander.getHitpoints() > 1) {
+            if (self.getActionPoints() >= moveCost(self, game)) {
+                move.setAction(ActionType.MOVE);
+                PathFinder pf = new PathFinder(world);
+
+                Direction direction = Direction.CURRENT_POINT;
+                if (isDesertMap){
+                    direction = pf.getDirection(self, world, commander.getX(), commander.getY(), 1);
+                }else{
+                    direction = pf.getDirection(self, world, commander.getX(), commander.getY(), 2);
+                }
+
+
+                if (direction.equals(Direction.CURRENT_POINT)){
+                    Bonus bonus = getNearestBonus(self, world, self.isHoldingMedikit(), self.isHoldingGrenade(), self.isHoldingFieldRation());
+                    if (null != bonus && isBonusReachable(bonus, world)) {
+                        System.out.println("trying to collect bonus");
+                        direction = pf.getDirection(self, world, bonus.getX(), bonus.getY(), 0);
+                    }else{
+                        direction = pf.getDirection(self,world,random.nextInt(30),random.nextInt(20),10);
+                    }
+                }
+                move.setDirection(direction);
+                return true;
+
+
+            }
+        }
+
+        return false;
+    }
+
+
+
     private void commanderTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
         if (isTank2012Map || isWhiteMap){
             if (changeStance(self, game, move)) return;
@@ -378,7 +431,7 @@ public final class MyStrategy implements Strategy {
 
         if (!self.getStance().equals(TrooperStance.STANDING)
                 && self.getActionPoints()>=game.getStanceChangeCost()
-                && !isTank2012Map){
+                && !isTank2012Map && !isWhiteMap){
             System.out.println("get up");
             move.setAction(ActionType.RAISE_STANCE);
             move.setDirection(Direction.CURRENT_POINT);
@@ -396,11 +449,10 @@ public final class MyStrategy implements Strategy {
         if (gotoSpottedEnemy(self, world, game, move, pf)) return;
 
         //выключено чтобы не запирать солдата в туннелях
-        if (followSoldier(self, world, game, move)){
+        if (!isCommanderLeader && followSoldier(self, world, game, move)){
             System.out.println("follow");
             return;
         }
-
 
         Trooper soldier = getSoldier(self, world, game, move);
         if (soldier==null || soldier.getHitpoints()==0){
@@ -521,7 +573,7 @@ public final class MyStrategy implements Strategy {
 
         if (!self.getStance().equals(TrooperStance.STANDING)
                 && self.getActionPoints()>=game.getStanceChangeCost()
-                && !isTank2012Map){
+                && !isTank2012Map && !isWhiteMap){
             System.out.println("get up");
             move.setAction(ActionType.RAISE_STANCE);
             move.setDirection(Direction.CURRENT_POINT);
@@ -537,6 +589,12 @@ public final class MyStrategy implements Strategy {
             return;
         }
 
+
+        //выключено чтобы не запирать солдата в туннелях
+        if (isCommanderLeader && followCommander(self, world, game, move)){
+            System.out.println("follow");
+            return;
+        }
 
         if (self.getActionPoints() < moveCost(self, game)) {
             System.out.println("exit");
