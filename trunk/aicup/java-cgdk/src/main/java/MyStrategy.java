@@ -19,15 +19,27 @@ public final class MyStrategy implements Strategy {
     private static final String TANK_2012 = "tank2012";
     private static final String MAZE_MAP = "MAZE_MAP";
     private static final String DESERT_MAP = "DESERT_MAP";
+    private static final String WHITE_MAP = "WHITE_MAP";
 
     private static boolean goToBonus = false;
 
     private boolean isDesertMap = false;
     private boolean isTank2012Map = false;
     private boolean isMazeMap = false;
+    private boolean isWhiteMap = false;
 
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
+
+        if (self.getActionPoints() >= game.getFieldRationEatCost()
+                && self.getActionPoints()<self.getInitialActionPoints()
+                && self.isHoldingFieldRation()) {
+            System.out.println("eat ration");
+            move.setAction(ActionType.EAT_FIELD_RATION);
+            move.setDirection(Direction.CURRENT_POINT);
+            return;
+        }
+
         if (mapName == null){
             CellType[][] worldCells = world.getCells();
             if (worldCells[1][2].equals(CellType.MEDIUM_COVER)
@@ -55,6 +67,19 @@ public final class MyStrategy implements Strategy {
                     &&worldCells[2][8].equals(CellType.HIGH_COVER)
                     ){
                 mapName = DESERT_MAP;
+            } else if (worldCells[28][7].equals(CellType.LOW_COVER)
+                    &&worldCells[27][7].equals(CellType.MEDIUM_COVER)
+                    &&worldCells[26][7].equals(CellType.MEDIUM_COVER)
+                    &&worldCells[25][7].equals(CellType.MEDIUM_COVER)
+                    &&worldCells[24][7].equals(CellType.LOW_COVER)
+                    &&worldCells[24][2].equals(CellType.HIGH_COVER)
+                    &&worldCells[24][3].equals(CellType.HIGH_COVER)
+                    &&worldCells[24][4].equals(CellType.HIGH_COVER)
+                    &&worldCells[23][2].equals(CellType.HIGH_COVER)
+                    &&worldCells[23][3].equals(CellType.HIGH_COVER)
+                    &&worldCells[23][4].equals(CellType.HIGH_COVER)
+                    ){
+                mapName = WHITE_MAP;
             }
         }
 
@@ -62,17 +87,18 @@ public final class MyStrategy implements Strategy {
         isDesertMap = DESERT_MAP.equals(mapName);
         isTank2012Map = TANK_2012.equals(mapName);
         isMazeMap = MAZE_MAP.equals(mapName);
+        isWhiteMap = WHITE_MAP.equals(mapName);
 
         if (previousSteps==null){
             previousSteps = new HashMap<>();
             prevActions = new HashSet<>();
         }
-        if (lastMoveIndex != world.getMoveIndex()){
-            lastMoveIndex = world.getMoveIndex();
-            System.out.println(previousSteps.toString());
-            previousSteps.clear();
-            prevActions.clear();
-        }
+//        if (lastMoveIndex != world.getMoveIndex()){
+//            lastMoveIndex = world.getMoveIndex();
+//            System.out.println(previousSteps.toString());
+//            previousSteps.clear();
+//            prevActions.clear();
+//        }
 
 
 
@@ -87,10 +113,15 @@ public final class MyStrategy implements Strategy {
 
         if (self.getType().equals(TrooperType.FIELD_MEDIC)) {
             medicTactic(self, world, game, move, pf);
-            return;
-        }
+            if (lastMoveIndex != world.getMoveIndex()){
+                lastMoveIndex = world.getMoveIndex();
+                System.out.println(previousSteps.toString());
+                previousSteps.clear();
+                prevActions.clear();
+            }
 
-        if (self.getType().equals(TrooperType.SOLDIER)) {
+            return;
+        } else if (self.getType().equals(TrooperType.SOLDIER)) {
             if (prevActions!=null && prevActions.size()==1 && prevActions.contains(ActionType.MOVE)
                     &&previousSteps.size()==2 && self.getActionPoints()<2){
                 stucked=true;
@@ -110,11 +141,27 @@ public final class MyStrategy implements Strategy {
             prevMove = move;
 
             soldierTactic(self, world, game, move, pf);
+
+            if (lastMoveIndex != world.getMoveIndex()){
+                lastMoveIndex = world.getMoveIndex();
+                System.out.println(previousSteps.toString());
+                previousSteps.clear();
+                prevActions.clear();
+            }
+
             return;
         }
 
         if (self.getType().equals(TrooperType.COMMANDER)) {
             commanderTactic(self, world, game, move, pf);
+
+            if (lastMoveIndex != world.getMoveIndex()){
+                lastMoveIndex = world.getMoveIndex();
+                System.out.println(previousSteps.toString());
+                previousSteps.clear();
+                prevActions.clear();
+            }
+
             return;
         }
 
@@ -122,19 +169,51 @@ public final class MyStrategy implements Strategy {
         Trooper enemy = getEnemy(self, world, game, move);
         if (null != enemy) {
             if (self.getActionPoints() >= self.getShootCost()) {
-                move.setAction(ActionType.SHOOT);
-                move.setX(enemy.getX());
-                move.setY(enemy.getY());
+                if( self.getDistanceTo(enemy)<=self.getShootingRange()) {
+                    System.out.println("shoot");
+                    move.setAction(ActionType.SHOOT);
+                    move.setX(enemy.getX());
+                    move.setY(enemy.getY());
+                    return;
+                }else if (self.getActionPoints()>=self.getShootCost()+moveCost(self, game)){
+                    System.out.println("come close to shoot");
+                    move.setAction(ActionType.MOVE);
+                    move.setDirection(pf.getDirection(self, world, enemy.getX(), enemy.getY(), self.getShootingRange()));
+                    return;
+                }
+
+                if (lastMoveIndex != world.getMoveIndex()){
+                    lastMoveIndex = world.getMoveIndex();
+                    System.out.println(previousSteps.toString());
+                    previousSteps.clear();
+                    prevActions.clear();
+                }
+
                 return;
             }
         }
 
 
         if (self.getActionPoints() < game.getStandingMoveCost()) {
+            if (lastMoveIndex != world.getMoveIndex()){
+                lastMoveIndex = world.getMoveIndex();
+                System.out.println(previousSteps.toString());
+                previousSteps.clear();
+                prevActions.clear();
+            }
+
             return;
         }
         move.setAction(ActionType.MOVE);
         move.setDirection(pf.getDirection(self, world, 15, 10, 3));
+
+        if (lastMoveIndex != world.getMoveIndex()){
+            lastMoveIndex = world.getMoveIndex();
+            System.out.println(previousSteps.toString());
+            previousSteps.clear();
+            prevActions.clear();
+        }
+
     }
 
     public Trooper getEnemy(Trooper self, World world, Game game, Move move) {
@@ -143,7 +222,7 @@ public final class MyStrategy implements Strategy {
         LinkedList<Trooper> trooperLinkedList = new LinkedList<>();
         for (Trooper t : world.getTroopers()) {
             if (!t.isTeammate()) {
-                if (world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
+                if (world.isVisible(self.getVisionRange(), self.getX(), self.getY(), self.getStance(),
                         t.getX(), t.getY(), t.getStance())) {
                     trooperLinkedList.add(t);
                 }
@@ -202,7 +281,7 @@ public final class MyStrategy implements Strategy {
 
 
     private void commanderTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
-        if (isTank2012Map){
+        if (isTank2012Map || isWhiteMap){
             if (changeStance(self, game, move)) return;
         }
 //        System.out.println(self.getDistanceTo(self.getX() + 1, self.getY() + 1));
@@ -292,7 +371,7 @@ public final class MyStrategy implements Strategy {
         if (isTank2012Map && self.getActionPoints()>=moveCost(self,game)){
             System.out.println("move to center. tank map");
             move.setAction(ActionType.MOVE);
-            move.setDirection(pf.getDirection(self,world,15,10,8));
+            move.setDirection(pf.getDirection(self,world,15,10,8.5));
             return;
         }
 
@@ -300,6 +379,14 @@ public final class MyStrategy implements Strategy {
         if (!self.getStance().equals(TrooperStance.STANDING)
                 && self.getActionPoints()>=game.getStanceChangeCost()
                 && !isTank2012Map){
+            System.out.println("get up");
+            move.setAction(ActionType.RAISE_STANCE);
+            move.setDirection(Direction.CURRENT_POINT);
+            return;
+        }
+        if (self.getStance().equals(TrooperStance.PRONE)
+            &&self.getActionPoints()>=game.getStanceChangeCost()
+            &&isWhiteMap){
             System.out.println("get up");
             move.setAction(ActionType.RAISE_STANCE);
             move.setDirection(Direction.CURRENT_POINT);
@@ -345,7 +432,7 @@ public final class MyStrategy implements Strategy {
 
     private void soldierTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
         goToBonus = false;
-        if (isTank2012Map){
+        if (isTank2012Map || isWhiteMap){
             if (changeStance(self, game, move)) return;
         }
 
@@ -405,7 +492,11 @@ public final class MyStrategy implements Strategy {
 
 //            if (kneelTrooper(self, world, game, move, enemy)) return;
 
-            if (changeStance(self, game, move)) return;
+            if (changeStance(self, game, move)){
+                return;
+            }
+
+
 
             if (self.getActionPoints() >= self.getShootCost()
                     && world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
@@ -437,6 +528,15 @@ public final class MyStrategy implements Strategy {
             return;
         }
 
+        if (self.getStance().equals(TrooperStance.PRONE)
+                &&self.getActionPoints()>=game.getStanceChangeCost()
+                &&isWhiteMap){
+            System.out.println("get up");
+            move.setAction(ActionType.RAISE_STANCE);
+            move.setDirection(Direction.CURRENT_POINT);
+            return;
+        }
+
 
         if (self.getActionPoints() < moveCost(self, game)) {
             System.out.println("exit");
@@ -446,7 +546,7 @@ public final class MyStrategy implements Strategy {
         if (isTank2012Map){
             if (self.getActionPoints()>=moveCost(self,game)){
                 move.setAction(ActionType.MOVE);
-                move.setDirection(pf.getDirection(self, world, 15, 10, 9));
+                move.setDirection(pf.getDirection(self, world, 15, 10, 8.5));
                 return;
             }
         }
@@ -471,9 +571,11 @@ public final class MyStrategy implements Strategy {
         if (!isMazeMap){
             if (commander!=null && commander.getHitpoints()>0){
                 if (getShortDistance(self, commander.getX(), commander.getY())>4.5){
-                    move.setAction(ActionType.MOVE);
-                    move.setDirection(Direction.CURRENT_POINT);
-                    return;
+                    if (self.getActionPoints()>=moveCost(self,game)){
+                        move.setAction(ActionType.MOVE);
+                        move.setDirection(Direction.CURRENT_POINT);
+                        return;
+                    }
                 }
             }
         }
@@ -516,7 +618,10 @@ public final class MyStrategy implements Strategy {
         TrooperStance trooperStance = getBestDMGStance(self, game);
         if(isTank2012Map){
             trooperStance = TrooperStance.PRONE;
+        }else if (isWhiteMap){
+            trooperStance = TrooperStance.KNEELING;
         }
+
         if (!self.getStance().equals(trooperStance) && self.getActionPoints()>=game.getStanceChangeCost()){
             System.out.println("change stance from "+self.getStance()+" to "+trooperStance);
             move.setAction(getAction(self.getStance(), trooperStance));
@@ -646,54 +751,66 @@ public final class MyStrategy implements Strategy {
     private Direction getCWDirection(Trooper self, World world, Game game, Move move, PathFinder pf) {
         wpReached = nextWPX>=0 && nextWPY>=0 && self.getDistanceTo(nextWPX,nextWPY)<=3;
         if (nextWPX<0 || nextWPY<0 || wpReached){
-            if (self.getX() < 15 && self.getY() < 10){
-                nextWPX = 29;
-                nextWPY = 0;
-                if (isMazeMap){
-                    nextWPX = 23;
-                    nextWPY = 5;
-                } else if (isDesertMap){
-                    nextWPX = 25;
+
+
+            if (isWhiteMap){
+                if (self.getX()<15){
+                    nextWPX = 22;
+                    nextWPY = 10;
+                }else{
+                    nextWPX = 8;
+                    nextWPY = 10;
+                }
+            }else{ //ifNot white map
+                if (self.getX() < 15 && self.getY() < 10){
+                    nextWPX = 29;
                     nextWPY = 0;
+                    if (isMazeMap){
+                        nextWPX = 23;
+                        nextWPY = 5;
+                    } else if (isDesertMap){
+                        nextWPX = 25;
+                        nextWPY = 0;
+                    }
                 }
-            }
-            else if (self.getX() >= 15 && self.getY() < 10){
-                nextWPX = 29;
-                nextWPY = 19;
-                if (isMazeMap){
-                    nextWPX = 23;
-                    nextWPY = 14;
-                } else if (isDesertMap){
-                    nextWPX = 25;
+                else if (self.getX() >= 15 && self.getY() < 10){
+                    nextWPX = 29;
                     nextWPY = 19;
+                    if (isMazeMap){
+                        nextWPX = 23;
+                        nextWPY = 14;
+                    } else if (isDesertMap){
+                        nextWPX = 25;
+                        nextWPY = 19;
+                    }
                 }
-            }
-            else if (self.getX() >= 15 && self.getY() >= 10){
-                nextWPX = 0;
-                nextWPY = 19;
-                if (isMazeMap){
-                    nextWPX = 6;
-                    nextWPY = 14;
-                } else if (isDesertMap){
-                    nextWPX = 4;
+                else if (self.getX() >= 15 && self.getY() >= 10){
+                    nextWPX = 0;
                     nextWPY = 19;
+                    if (isMazeMap){
+                        nextWPX = 6;
+                        nextWPY = 14;
+                    } else if (isDesertMap){
+                        nextWPX = 4;
+                        nextWPY = 19;
+                    }
                 }
-            }
-            else if (self.getX() < 15 && self.getY() >= 10){
-                nextWPX = 0;
-                nextWPY = 0;
-                if (isMazeMap){
-                    nextWPX = 6;
-                    nextWPY = 5;
-                }
-                else if (isDesertMap){
-                    nextWPX = 4;
+                else if (self.getX() < 15 && self.getY() >= 10){
+                    nextWPX = 0;
                     nextWPY = 0;
+                    if (isMazeMap){
+                        nextWPX = 6;
+                        nextWPY = 5;
+                    }
+                    else if (isDesertMap){
+                        nextWPX = 4;
+                        nextWPY = 0;
+                    }
                 }
-            }
-            else{
-                nextWPX = 15;
-                nextWPY = 10;
+                else{
+                    nextWPX = 15;
+                    nextWPY = 10;
+                }
             }
         }
 
@@ -725,6 +842,14 @@ public final class MyStrategy implements Strategy {
                     }
                 }
             }
+
+            if (isWhiteMap){
+                if (tmpB.getX()==0 || tmpB.getX()==29){
+                    if(tmpB.getY()>6 && tmpB.getY()<13){
+                        continue;
+                    }
+                }
+            }
             bonuses.add(tmpB);
 //            return tmpB;
         }
@@ -743,6 +868,16 @@ public final class MyStrategy implements Strategy {
         return ret;
     }
 
+    private int getEnemyCount(Trooper self, World world, Game game, Move move){
+        int ret = 0;
+        for (Trooper t : world.getTroopers()){
+            if (!t.isTeammate()){
+                ret++;
+            }
+        }
+        return ret;
+    }
+
     private Trooper getPrimary(Trooper self, World world, Game game, Move move){
         if (primaryId>=0 && primaryType !=null){
             for (Trooper t : world.getTroopers()){
@@ -754,8 +889,133 @@ public final class MyStrategy implements Strategy {
         return null;
     }
 
-    private void medicTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
+
+    private static LinkedList<Move> medicMovements = null;
+
+    private void medicTacticTank2012(Trooper self, World world, Game game, Move move, PathFinder pf) {
+        /*Init start vars*/
+//        if (medicMovements==null){
+//            medicMovements = new LinkedList<>();
+//        }
+//        boolean isContinueMove = lastMoveIndex==world.getMoveIndex();
+
+
+        /*kneel at start*/
+//        if (!self.getStance().equals(TrooperStance.KNEELING) && self.getActionPoints()>=game.getStanceChangeCost()){
+//            System.out.println("medic change stance"+self.getStance()+" to "+TrooperStance.KNEELING);
+//            move.setAction(getAction(self.getStance(), TrooperStance.KNEELING));
+//            move.setDirection(Direction.CURRENT_POINT);
+//            return;
+//        }
+
+        Trooper enemy = getEnemy(self, world, game, move);
+//        int moveCost = moveCost(self,game);
+//        if (enemy!=null && enemy.getHitpoints()>0){
+//            /*our move, 1st time spotted*/
+//            if(isContinueMove){
+//                if (self.getActionPoints()>=moveCost){
+//                    if (self.getActionPoints()>=moveCost+self.getShootCost()){
+//
+//                    }
+//                }
+//            }
+//        }
+
+        int enemyCount = getEnemyCount(self, world, game, move);
+
+        if (self.getHitpoints() < 50 && enemyCount<2) {
+            if (self.getActionPoints() >= game.getMedikitUseCost() && self.isHoldingMedikit()) {
+                move.setAction(ActionType.USE_MEDIKIT);
+                move.setDirection(Direction.CURRENT_POINT);
+                return;
+            }
+        }
+
+        if (enemyCount>=2){
+            DestFinder df = new DestFinder(world);
+            Node safeSpot = df.getSafePlace(self, world, game, move);
+
+            if (safeSpot.x!=self.getX()
+                    && safeSpot.y!= self.getY()
+                    && self.getActionPoints()>=moveCost(self, game)){
+                move.setAction(ActionType.MOVE);
+                move.setDirection(pf.getDirection(self, world, safeSpot.x, safeSpot.y, 0));
+                return;
+            }
+        }
+
+        if (null != enemy && enemy.getHitpoints() > 0) {
+            if (self.getActionPoints() >= game.getGrenadeThrowCost() && self.isHoldingGrenade()){
+                if( self.getDistanceTo(enemy) <= game.getGrenadeThrowRange()) {
+                    System.out.println("grenade!" + game.getGrenadeThrowCost());
+                    move.setAction(ActionType.THROW_GRENADE);
+                    move.setX(enemy.getX());
+                    move.setY(enemy.getY());
+                    return;
+                }else if (self.getActionPoints() >= game.getGrenadeThrowCost()+moveCost(self, game)){
+                    System.out.println("come close");
+                    move.setAction(ActionType.MOVE);
+                    move.setDirection(pf.getDirection(self, world, enemy.getX(), enemy.getY(), game.getGrenadeThrowRange()));
+                    return;
+                }
+            }
+
+            if (self.getActionPoints() >= self.getShootCost()) {
+                if( self.getDistanceTo(enemy)<=self.getShootingRange()) {
+                    System.out.println("shoot");
+                    move.setAction(ActionType.SHOOT);
+                    move.setX(enemy.getX());
+                    move.setY(enemy.getY());
+                    return;
+                }else if (self.getActionPoints()>=self.getShootCost()+moveCost(self, game)){
+                    System.out.println("come close to shoot");
+                    move.setAction(ActionType.MOVE);
+                    move.setDirection(pf.getDirection(self, world, enemy.getX(), enemy.getY(), self.getShootingRange()));
+                    return;
+                }
+            }
+        }
+
+        if (collectBonus(self, world, game, move, pf)){
+            return;
+        }
+
+//        if (self.getActionPoints() >= moveCost(self, game)) {
+//            move.setAction(ActionType.MOVE);
+//            move.setDirection(getCWDirection(self, world, game, move, pf));
+//            return;
+//        }
+
         Trooper soldier = getSoldier(self, world, game, move);
+        Trooper commander = getCommander(self, world, game, move);
+        if (self.getActionPoints() >= moveCost(self, game)) {
+            if (soldier!=null && soldier.getHitpoints()>0){
+                move.setAction(ActionType.MOVE);
+                move.setDirection(pf.getDirection(self,world,soldier.getX(), soldier.getY(), 1));
+                return;
+            }
+            if (commander!=null && commander.getHitpoints()>0){
+                move.setAction(ActionType.MOVE);
+                move.setDirection(pf.getDirection(self,world,commander.getX(), commander.getY(), 1));
+                return;
+            }
+        }
+
+    }
+
+
+    private void medicTactic(Trooper self, World world, Game game, Move move, PathFinder pf) {
+
+        Trooper soldier = getSoldier(self, world, game, move);
+        Trooper commander = getCommander(self, world, game, move);
+
+        if (isTank2012Map &&
+                ((soldier!= null && soldier.getHitpoints()>0 && !isNear(self,soldier)) || (commander!=null &&commander.getHitpoints()>0 && !isNear(self,commander)))
+                ){
+            medicTacticTank2012(self, world, game, move, pf);
+            return;
+        }
+
         Trooper enemy = getEnemy(self, world, game, move);
 
         if (getFriendlyCount(self, world, game, move)!=1){
@@ -812,7 +1072,6 @@ public final class MyStrategy implements Strategy {
 
             boolean saveCommander = false;
 
-            Trooper commander = getCommander(self, world, game, move);
             if (null != commander && commander.getHitpoints() > 0) {
                 if (commander.getHitpoints() < commander.getMaximalHitpoints()){
                     if (isNear(self, commander)) {
@@ -876,21 +1135,24 @@ public final class MyStrategy implements Strategy {
                 }
             }
 
-            if (self.getActionPoints() >= self.getShootCost()) {
-                move.setAction(ActionType.SHOOT);
-                move.setX(enemy.getX());
-                move.setY(enemy.getY());
-                return;
+            if (self.getActionPoints() >= self.getShootCost()){
+                if( self.getDistanceTo(enemy)<=self.getShootingRange()) {
+                    System.out.println("shoot");
+                    move.setAction(ActionType.SHOOT);
+                    move.setX(enemy.getX());
+                    move.setY(enemy.getY());
+                    return;
+                }else if (self.getActionPoints()>=self.getShootCost()+moveCost(self, game)){
+                    System.out.println("come close to shoot");
+                    move.setAction(ActionType.MOVE);
+                    move.setDirection(pf.getDirection(self, world, enemy.getX(), enemy.getY(), self.getShootingRange()));
+                    return;
+                }
             }
         }
 
 
-        if (self.getActionPoints() >= game.getFieldRationEatCost() && self.isHoldingFieldRation()) {
-            System.out.println("eat ration");
-            move.setAction(ActionType.EAT_FIELD_RATION);
-            move.setDirection(Direction.CURRENT_POINT);
-            return;
-        }
+
 
         if (self.getHitpoints() < self.getMaximalHitpoints()) {
             if (self.getActionPoints() >= game.getFieldMedicHealCost()) {
@@ -899,8 +1161,6 @@ public final class MyStrategy implements Strategy {
                 return;
             }
         }
-
-        Trooper commander = getCommander(self, world, game, move);
 
         if (null != soldier && soldier.getHitpoints() > 0) {
             if (self.getActionPoints() >= moveCost(self, game)) {
